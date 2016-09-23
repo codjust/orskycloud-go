@@ -60,8 +60,26 @@
 	    -webkit-transition: all .2s;
 	    -ms-transition: all .2s;
 }
+
+/*验证码样式*/
+	.code
+	{
+	 font-family:Arial !important;
+	 font-style:italic !important;
+	 color:#0F3 !important;
+	 font-size:25px !important ;
+	 letter-spacing:3px !important;
+	 font-weight:bolder !important;
+	 float:left !important;
+	 cursor:pointer !important;
+	 line-height:60px !important;
+	 text-align:center !important;
+	 vertical-align:middle !important;
+	 height:45px !important;
+	}
+	
 </style>
-<body>
+<body onload="createCode()">
 <div class="tyg-div">
 	<ul>
     	<li>让</li>
@@ -100,11 +118,15 @@
             <div style="margin:5px 0px;">
 				<input type="text" placeholder="重复密码"/>
 			</div>
-			<div style="margin:5px 0px;">
-				<input type="text" style="width:150px;" placeholder="请输入验证码..."/>
-				<img src="static/img/1.png" style="vertical-align:bottom;" alt="验证码"/>
-			</div>
-            <button type="submit" >注<span style="width:20px;"></span>册</button>
+			<table >
+			<tr align="center">	
+              <td > <input type="text" style="width:150px;" placeholder="请输入验证码..."/></td>
+			  <td ><div class="code" id="checkCode" onclick="createCode()" ></div></td>
+			</tr>		
+        	</table>
+            <button type="submit" >
+            注<span style="width:20px;"></span>册</p>
+            </button>
 		</form>
 	</div>
 </div>
@@ -112,15 +134,14 @@
 
 <script type="text/javascript" src="static/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="static/js/com.js"></script>
+<script type="text/javascript" src="static/js/tools.js"></script>
 <!--[if IE 6]>
 <script language="javascript" type="text/javascript" src="./script/ie6_png.js"></script>
 <script language="javascript" type="text/javascript">
 DD_belatedPNG.fix(".png");
 </script>
 <![endif]-->
-<div style="text-align:center;">
-<p>来源:<a href="http://www.mycodes.net/" target="_blank">源码之家</a></p>
-</div>
+
 
 
 </body>

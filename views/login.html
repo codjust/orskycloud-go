@@ -60,8 +60,25 @@
 	    -webkit-transition: all .2s;
 	    -ms-transition: all .2s;
 }
+/*验证码样式*/
+	.code
+	{
+	 font-family:Arial !important;
+	 font-style:italic !important;
+	 color:#0F3 !important;
+	 font-size:25px !important ;
+	 letter-spacing:3px !important;
+	 font-weight:bolder !important;
+	 float:left !important;
+	 cursor:pointer !important;
+	 line-height:60px !important;
+	 text-align:center !important;
+	 vertical-align:middle !important;
+	 height:45px !important;
+	}
+	
 </style>
-<body>
+<body onload="createCode()">
 <div class="tyg-div">
 	<ul>
     	<li>让</li>
@@ -97,14 +114,18 @@
 			<div style="margin:5px 0px;">
 				<input type="text" placeholder="请输入密码..."/>
 			</div>
-			<div style="margin:5px 0px;">
+			<!--<div style="margin:5px 0px;">
 				<input type="text" style="width:150px;" placeholder="请输入验证码..."/>
 				<img src="static/img/1.png" style="vertical-align:bottom;" alt="验证码"/>
-			</div>
+			</div>-->
+			<table >
+			<tr align="center">	
+              <td > <input type="text" style="width:150px;" placeholder="请输入验证码..."/></td>
+			  <td ><div class="code" id="checkCode" onclick="createCode()" ></div></td>
+			</tr>		
+        	</table>
             <button type="submit" >登<span style="width:20px;"></span>录</button>
            	 <table align="center" style="margin:auto">
-             <tr>
-             </tr>
              <tr>
              <td> <p style="font-size:16px;"><a href="/register">去注册！&nbsp;&nbsp;</a></p> </td> 
              <td><p style="font-size:16px;"><a href="#">忘记密码？</a></p></td>  
@@ -117,12 +138,7 @@
 
 <script type="text/javascript" src="static/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="static/js/com.js"></script>
-<!--[if IE 6]>
-<script language="javascript" type="text/javascript" src="./script/ie6_png.js"></script>
-<script language="javascript" type="text/javascript">
-DD_belatedPNG.fix(".png");
-</script>
-<![endif]-->
+<script type="text/javascript" src="static/js/tools.js"></script>
 
 </body>
 </html>
