@@ -15,3 +15,16 @@ func (c *LoginController) Login() {
 func (c *LoginController) Register() {
 	c.TplName = "register.html"
 }
+
+func (c *LoginController) RegisterInfo() {
+	//flash := beego.NewFlash()
+	//username, password := c.Input().Get("username"), c.Input().Get("password")
+	username, password := c.GetString("username"), c.GetString("password")
+
+	c.Data["json"] = "error"
+	c.ServeJSONP()
+	beego.Debug("username:", username, password)
+
+	//c.Redirect("/", 302)
+
+}
