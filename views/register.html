@@ -115,21 +115,21 @@
 		<form action="">
 			<h2>注册新用户</h2>
 			<div style="margin:5px 0px;">
-				<input type="text" placeholder="用户名"/>
+				<input id="username" type="text" placeholder="用户名(4-15)"/>
 			</div>
 			<div style="margin:5px 0px;">
-				<input type="password" placeholder="密码"/>
+				<input id="password" type="password" placeholder="密码"/>
 			</div>
             <div style="margin:5px 0px;">
-				<input type="password" placeholder="重复密码"/>
+				<input id="passwordAgain" type="password" placeholder="重复密码"/>
 			</div>
 			<table >
 			<tr align="center">	
-              <td > <input type="text" style="width:150px;" placeholder="请输入验证码..."/></td>
+              <td > <input id="inputCode" type="text" style="width:150px;" placeholder="请输入验证码..."/></td>
 			  <td ><div class="code" id="checkCode" onclick="createCode()" ></div></td>
 			</tr>		
         	</table>
-            <button type="submit" >
+            <button type="submit"  onclick="SubmitRegistInfo()">
             注<span style="width:20px;"></span>册</p>
             </button>
 		</form>
@@ -140,14 +140,5 @@
 <script type="text/javascript" src="static/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="static/js/com.js"></script>
 <script type="text/javascript" src="static/js/tools.js"></script>
-<!--[if IE 6]>
-<script language="javascript" type="text/javascript" src="./script/ie6_png.js"></script>
-<script language="javascript" type="text/javascript">
-DD_belatedPNG.fix(".png");
-</script>
-<![endif]-->
-
-
-
 </body>
 </html>

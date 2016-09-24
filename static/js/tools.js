@@ -18,20 +18,37 @@ function createCode()
   checkCode.innerHTML = code;
  }
 }
-function validateCode() 
+
+function CheckRegistInfo()
 {
- var inputCode=document.getElementById("inputCode").value;
- if(inputCode.length <= 0) 
- {
-  alert("请输入验证码！");
- }
- else if(inputCode.toUpperCase() != code.toUpperCase()) 
- {
-   alert("验证码输入有误！");
-   createCode();
- }
- else 
- {
-  alert("验证码正确！");
- }    
-}  
+	var UserName = document.getElementById("username").value;
+	var PassWord = document.getElementById("password").value;
+	var PassWordAgain = document.getElementById("passwordAgain").value;
+	var inputCode=document.getElementById("inputCode").value;
+	if (UserName.length<=0 || PassWord.length <= 0 || PassWordAgain.length <=0 || inputCode.length <= 0)
+	{
+		alert("输入不能为空")
+		//return
+	}
+	else if(UserName.length <4 || UserName.length >15 )
+	{
+		alert("用户名长度不合法，请重新输入")
+		//return
+	}
+	else if(PassWord != PassWordAgain)
+	{
+		alert("两次密码不一致，请重新设置")
+		//return
+	}
+	else if(inputCode.toUpperCase() != code.toUpperCase()) 
+ 	{
+   		alert("验证码输入有误！请重新输入");
+   		createCode();
+ 	}  
+
+}
+
+function SubmitRegistInfo()
+{
+	CheckRegistInfo()
+}

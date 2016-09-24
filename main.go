@@ -1,11 +1,10 @@
 package main
 
 import (
-	_ "orskycloud/routers"
 	"github.com/astaxie/beego"
+	_ "orskycloud/routers"
 )
 
 func main() {
 	beego.Run()
 }
-
