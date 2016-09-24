@@ -142,25 +142,25 @@
 <script type="text/javascript">
 function SubmitRegistInfo()
 {
-	CheckRegistInfo()
 	var UserName = document.getElementById("username").value;
 	var PassWord = document.getElementById("password").value;
-
-	// $.post("/register/handler",{"username":UserName,"password":PassWord},function(rst){
-	// 	if( rst == "error")
-	// 	{
-	// 		alert("error info")
-	// 	}
-	// });
-	//alert({{.pwd}})
-
+	var PassWordAgain = document.getElementById("passwordAgain").value;
+	var inputCode = document.getElementById("inputCode").value;
+	var status = CheckRegistInfo(UserName,PassWord,PassWordAgain,inputCode)
+	if(status == false) return;
 	$.ajax({
 		type:"POST",
 		url:"/register/handler",
 		data:{"username":UserName,"password":PassWord}
-	}).done(function(msg){
-		alert(msg.Val)
+		}).done(function(msg){
+		alert("info:"+{{.data}})
+		if(msg.Val != null)
+		{
+			window.location.href="/"
+		}
 	});
+	alert("info:"+{{.data}})
+    alert("注册成功，返回登录页面")
 }
 
 </script>

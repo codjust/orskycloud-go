@@ -19,28 +19,34 @@ function createCode()
  }
 }
 
-function CheckRegistInfo()
+function CheckRegistInfo(UserName,PassWord,PassWordAgain,inputCode)
 {
-	var UserName = document.getElementById("username").value;
-	var PassWord = document.getElementById("password").value;
-	var PassWordAgain = document.getElementById("passwordAgain").value;
-	var inputCode = document.getElementById("inputCode").value;
+	// var UserName = document.getElementById("username").value;
+	// var PassWord = document.getElementById("password").value;
+	// var PassWordAgain = document.getElementById("passwordAgain").value;
+	// var inputCode = document.getElementById("inputCode").value;
 	if (UserName.length<=0 || PassWord.length <= 0 || PassWordAgain.length <=0 || inputCode.length <= 0)
 	{
 		alert("输入不能为空")
+		return false;
 	}
 	else if(UserName.length < 4 || UserName.length > 15 )
 	{
 		alert("用户名长度不合法，请重新输入")
+		return false;
 	}
 	else if(PassWord != PassWordAgain)
 	{
 		alert("两次密码不一致，请重新设置")
+		return false;
 	}
 	else if(inputCode.toUpperCase() != code.toUpperCase()) 
  	{
    		alert("验证码输入有误！请重新输入");
    		createCode();
+   		return false;
  	}  
+
+ 	return true;
 }
 

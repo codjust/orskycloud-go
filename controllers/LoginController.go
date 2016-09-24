@@ -17,14 +17,13 @@ func (c *LoginController) Register() {
 }
 
 func (c *LoginController) RegisterInfo() {
-	//flash := beego.NewFlash()
-	//username, password := c.Input().Get("username"), c.Input().Get("password")
 	username, password := c.GetString("username"), c.GetString("password")
-
-	c.Data["json"] = "error"
-	c.ServeJSONP()
+	result := struct {
+		Val string
+	}{username}
+	c.Data["data"] = "test info"
+	c.Data["json"] = &result
+	c.ServeJSON()
 	beego.Debug("username:", username, password)
-
-	//c.Redirect("/", 302)
 
 }
