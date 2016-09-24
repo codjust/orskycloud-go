@@ -128,7 +128,7 @@
 			  <td ><div class="code" id="checkCode" onclick="createCode()" ></div></td>
 			</tr>		
         	</table>
-            <button type="submit"  onclick="SubmitRegistInfo()">
+            <button type="button"  onclick="SubmitRegistInfo()">
             注<span style="width:20px;"></span>册</p>
             </button>
 		</form>
@@ -149,18 +149,17 @@ function SubmitRegistInfo()
 	var status = CheckRegistInfo(UserName,PassWord,PassWordAgain,inputCode)
 	if(status == false) return;
 	$.ajax({
+		async: false,
 		type:"POST",
 		url:"/register/handler",
 		data:{"username":UserName,"password":PassWord}
 		}).done(function(msg){
-		alert("info:"+{{.data}})
+		window.location.href="/"
 		if(msg.Val != null)
 		{
 			window.location.href="/"
 		}
 	});
-	alert("info:"+{{.data}})
-    alert("注册成功，返回登录页面")
 }
 
 </script>

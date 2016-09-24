@@ -21,7 +21,6 @@ func (c *LoginController) RegisterInfo() {
 	result := struct {
 		Val string
 	}{username}
-	c.Data["data"] = "test info"
 	c.Data["json"] = &result
 	c.ServeJSON()
 	beego.Debug("username:", username, password)
