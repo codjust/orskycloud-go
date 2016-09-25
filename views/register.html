@@ -154,10 +154,18 @@ function SubmitRegistInfo()
 		url:"/register/handler",
 		data:{"username":UserName,"password":PassWord}
 		}).done(function(msg){
-		window.location.href="/"
-		if(msg.Val != null)
+		if(msg.Val == "exist")
 		{
-			window.location.href="/"
+			alert("该用户已注册，请返回登录")
+		}
+		else if(msg.Val == "success")
+		{
+			alert("注册成功，点确定返回登录界面")
+			window.location.href = "/"
+		}
+		else
+		{
+			alert("return null:",msg.Val)
 		}
 	});
 }
