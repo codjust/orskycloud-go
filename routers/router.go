@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"orskycloud/controllers"
+	"orskycloud-go/controllers"
 
 	"github.com/astaxie/beego"
 )
