@@ -3,8 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/astaxie/beego"
-	"github.com/fzzy/radix/redis"
-	"time"
+	"orskycloud-go/models"
 )
 
 type LoginController struct {
@@ -28,6 +27,7 @@ func (c *LoginController) Register() {
 func (c *LoginController) RegisterInfo() {
 	username, password := c.GetString("username"), c.GetString("password")
 
+	res := models.HandleRegist(username, password)
 	// client, err := redis.DialTimeout("tcp", "127.0.0.1:6379", time.Duration(10)*time.Second)
 	// errHndlr(err)
 
@@ -43,5 +43,5 @@ func (c *LoginController) RegisterInfo() {
 	// }{info}
 	// c.Data["json"] = &result
 	// c.ServeJSON()
-	beego.Debug("username:", username, password)
+	beego.Debug("username:", res, username, password)
 }

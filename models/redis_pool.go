@@ -1,29 +1,51 @@
 package models
 
-import{
-	"github.com/astaxie/beego"
-	"github.com/fzzy/radix/redis"
-	"github.com/fzzy/radix/pool"
+import (
 	"fmt"
+	"github.com/astaxie/beego"
+	"github.com/fzzy/radix/pool"
+	//"github.com/fzzy/radix/redis"
 	"os"
-}
+	//"strings"
+)
 
-var{
+var (
 	REDIS_HOST string
 	REDIS_DB   int
-}
+	red        *pool.Pool
+)
 
-func ErrHndlr(err error) {
+func ErrHandlr(err error) {
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
 }
 
-func init(){
+func init() {
 	REDIS_HOST = beego.AppConfig.String("redis.host")
-	REDIS_DB,_ = beego.AppConfig.Int("REDIS_DB")
+	REDIS_DB, _ = beego.AppConfig.Int("REDIS_DB")
 
-	red, err := pool.NewPool("tcp",REDIS_HOST, 10)
-	ErrHndlr(err)
+	var err error
+	red, err = pool.NewPool("tcp", REDIS_HOST, 10)
+	ErrHandlr(err)
+}
+
+func HandleRegist(username, password string) string {
+	// REDIS_HOST = beego.AppConfig.String("redis.host")
+	// REDIS_DB, _ = beego.AppConfig.Int("REDIS_DB")
+
+	// red, err := pool.NewPool("tcp", REDIS_HOST, 10)
+	// ErrHandlr(err)
+	//key := username + "#" + password
+	client, err := red.Get()
+	ErrHandlr(err)
+	res, err := client.Cmd("get", "name").Str()
+	ErrHandlr(err)
+	red.Put(client)
+	// if res != nil {
+	// 	return res.Str()
+	// }
+	// return "some"
+	return res
 }
