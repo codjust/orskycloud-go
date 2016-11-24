@@ -1,13 +1,13 @@
 package models
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/astaxie/beego"
 	"github.com/fzzy/radix/pool"
 	//"github.com/fzzy/radix/redis"
-	"crypto/md5"
+	"orskycloud-go/comm"
 	"os"
-	//"strings"
+	"time"
 )
 
 var (
@@ -18,7 +18,7 @@ var (
 
 func ErrHandlr(err error) {
 	if err != nil {
-		fmt.Println("error:", err)
+		beego.Debug("error:", err)
 		os.Exit(1)
 	}
 }
@@ -36,21 +36,16 @@ func HandleRegist(username, password string) string {
 	key := username + "#" + password
 	client, err := red.Get()
 	ErrHandlr(err)
-	res, err := client.Cmd("hget", "User", key).Str()
-	ErrHandlr(err)
-	if res == "" {
+	res, _ := client.Cmd("hget", "User", key).Str()
+	if res != "" {
 		return "exist"
 	}
-	// srcData := []byte("iyannik0215")
-	// cipherText1 := md5.Sum(srcData)
-	// fmt.Println(cipherText1)
-
-	uid, err := client.Cmd("incr", "nextUserId").Str()
-	ErrHandlr(err)
-	srcData := []byte(uid)
-	uid = md5.Sum(srcData)
+	client.Cmd("incr", "nextUserId").Str()
+	uid_t, _ := client.Cmd("get", "nextUserId").Str()
+	beego.Debug("uid_t:", uid_t)
+	uid := comm.Md5_go(uid_t)
+	beego.Debug("uid md5:", uid)
 	UserList, err := client.Cmd("get", "UserList").Str()
-	ErrHandlr(err)
 	UserList = UserList + uid + "#"
 	client.Cmd("set", "UserList", UserList)
 	client.Cmd("hset", "User", key, uid)
@@ -58,13 +53,10 @@ func HandleRegist(username, password string) string {
 
 	client.Cmd("hset", "uid:"+uid, "username", username)
 	client.Cmd("hset", "uid:"+uid, "password", password)
-	localtime := time.Now().Unix()
+	localtime := time.Now().Format("2006-01-02 15:04:05")
 	client.Cmd("hset", "uid:"+uid, "sign_up_time", localtime)
 
 	red.Put(client)
-	// if res != nil {
-	// 	return res.Str()
-	// }
-	// return "some"
-	return res
+
+	return "success"
 }

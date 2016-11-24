@@ -28,20 +28,11 @@ func (c *LoginController) RegisterInfo() {
 	username, password := c.GetString("username"), c.GetString("password")
 
 	res := models.HandleRegist(username, password)
-	// client, err := redis.DialTimeout("tcp", "127.0.0.1:6379", time.Duration(10)*time.Second)
-	// errHndlr(err)
 
-	// r := client.Cmd("select", 0)
-	// errHndlr(r.Err)
-
-	// client.Cmd("set", "test", "sds")
-	// if username != nil || password |= nil {
-	// 	beego.Debug("username:", username, password, info)
-	// }
-	// result := struct {
-	// 	Val string
-	// }{info}
-	// c.Data["json"] = &result
-	// c.ServeJSON()
+	result := struct {
+		Val string
+	}{res}
+	c.Data["json"] = &result
+	c.ServeJSON()
 	beego.Debug("username:", res, username, password)
 }
