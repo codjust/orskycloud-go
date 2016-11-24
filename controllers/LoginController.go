@@ -36,3 +36,19 @@ func (c *LoginController) RegisterInfo() {
 	c.ServeJSON()
 	beego.Debug("username:", res, username, password)
 }
+
+func (c *LoginController) LoginCheck() {
+	username, password := c.GetString("username"), c.GetString("password")
+	beego.Debug("login info:", username, password)
+	res := models.HandleLogin(username, password)
+	beego.Debug("res:", res)
+	if res == "login success" {
+		c.SetSession("username", username)
+		c.SetSession("password", password)
+	}
+	result := struct {
+		Val string
+	}{res}
+	c.Data["json"] = &result
+	c.ServeJSON()
+}

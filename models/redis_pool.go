@@ -60,3 +60,17 @@ func HandleRegist(username, password string) string {
 
 	return "success"
 }
+
+func HandleLogin(username, password string) string {
+	key := username + "#" + comm.Md5_go(password)
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	res, _ := client.Cmd("hget", "User", key).Str()
+	if res == "" {
+		return "login failed"
+	} else {
+		return "login success"
+	}
+
+}

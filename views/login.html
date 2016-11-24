@@ -81,7 +81,7 @@
 	 vertical-align:middle !important;
 	 height:45px !important;
 	}
-	
+
 </style>
 <body onload="createCode()">
 <div class="tyg-div">
@@ -94,7 +94,7 @@
     	<li><div style="margin-left:100px;">生</div></li>
     	<li><div style="margin-left:120px;">活</div></li>
     </ul>
-</div> 
+</div>
 <div id="contPar" class="contPar">
 	<div id="page1"  style="z-index:1;">
 		<div class="title0">ORSkyCloud</div>
@@ -114,26 +114,22 @@
 		<form action="">
 			<h2>登录</h2><p class="tyg-p">Welcome to ORSkyCloud</p>
 			<div style="margin:5px 0px;">
-				<input type="text" placeholder="请输入账号..."/>
+				<input id="username" type="text" placeholder="请输入账号..."/>
 			</div>
 			<div style="margin:5px 0px;">
-				<input type="password" placeholder="请输入密码..."/>
+				<input id="password" type="password" placeholder="请输入密码..."/>
 			</div>
-			<!--<div style="margin:5px 0px;">
-				<input type="text" style="width:150px;" placeholder="请输入验证码..."/>
-				<img src="static/img/1.png" style="vertical-align:bottom;" alt="验证码"/>
-			</div>-->
 			<table >
-			<tr align="center">	
-              <td > <input type="text" style="width:150px;" placeholder="请输入验证码..."/></td>
+			<tr align="center">
+              <td > <input type="text" id="inputCode" style="width:150px;" placeholder="请输入验证码..."/></td>
 			  <td ><div class="code" id="checkCode" onclick="createCode()" ></div></td>
-			</tr>		
+			</tr>
         	</table>
-            <button type="submit" >登<span style="width:20px;"></span>录</button>
+            <button type="button" onclick="SubmitLogin()">登<span style="width:20px;"></span>录</button>
            	 <table align="center" style="margin:auto">
              <tr>
-             <td> <p style="font-size:16px;"><a href="/register">去注册！&nbsp;&nbsp;</a></p> </td> 
-             <td><p style="font-size:16px;"><a href="#">忘记密码？</a></p></td>  
+             <td> <p style="font-size:16px;"><a href="/register">去注册！&nbsp;&nbsp;</a></p> </td>
+             <td><p style="font-size:16px;"><a href="#">忘记密码？</a></p></td>
             </tr>
            	</table>
 		</form>
@@ -144,6 +140,34 @@
 <script type="text/javascript" src="static/js/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="static/js/com.js"></script>
 <script type="text/javascript" src="static/js/tools.js"></script>
-
+<script type="text/javascript">
+function SubmitLogin()
+{
+	var UserName  = document.getElementById("username").value;
+	var PassWord  = document.getElementById("password").value;
+	var inputCode = document.getElementById("inputCode").value;
+	var status = CheckLogin(UserName,PassWord,inputCode)
+	if(status == false) return;
+	$.ajax({
+		async: false,
+		type:"POST",
+		url:"/login/handler",
+		data:{"username":UserName,"password":PassWord}
+		}).done(function(msg){
+		if(msg.Val == "login failed")
+		{
+			alert("提示：用户名或密码错误或未注册！")
+		}
+		else if(msg.Val == "login success")
+		{
+			alert("登录成功！")
+		}
+		else
+		{
+			alert("return null:",msg.Val)
+		}
+	});
+}
+</script>
 </body>
 </html>
