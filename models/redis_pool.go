@@ -33,7 +33,7 @@ func init() {
 }
 
 func HandleRegist(username, password string) string {
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
 	client, err := red.Get()
 	ErrHandlr(err)
 	res, _ := client.Cmd("hget", "User", key).Str()
@@ -47,15 +47,15 @@ func HandleRegist(username, password string) string {
 	beego.Debug("uid md5:", uid)
 	UserList, err := client.Cmd("get", "UserList").Str()
 	UserList = UserList + uid + "#"
+	localtime := time.Now().Format("2006-01-02 15:04:05")
+	client.Cmd("multi") //redis事务
 	client.Cmd("set", "UserList", UserList)
 	client.Cmd("hset", "User", key, uid)
 	client.Cmd("incr", "UserCount")
-
 	client.Cmd("hset", "uid:"+uid, "username", username)
-	client.Cmd("hset", "uid:"+uid, "password", password)
-	localtime := time.Now().Format("2006-01-02 15:04:05")
+	client.Cmd("hset", "uid:"+uid, "password", comm.Md5_go(password))
 	client.Cmd("hset", "uid:"+uid, "sign_up_time", localtime)
-
+	client.Cmd("exec")
 	red.Put(client)
 
 	return "success"
