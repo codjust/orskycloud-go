@@ -78,7 +78,8 @@ func HandleLogin(username, password string) string {
 func ReturnHomePage(username, password string) string {
 	client, err := red.Get()
 	ErrHandlr(err)
-	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	last_login_time, _ := client.Cmd("hget", "uid:"+userkey, "last_login_time").Str()
 	red.Put(client)

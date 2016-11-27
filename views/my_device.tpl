@@ -1,0 +1,56 @@
+<div class="row-fluid">
+	<div class="page-header">
+		<h1>设备 <small>全部设备</small></h1>
+	</div>
+<table class="table table-striped table-bordered table-condensed">
+	<thead>
+	<tr>
+		<th>设备ID</th>
+		<th>设备名称</th>
+		<th>设备描述</th>
+		<th>创建时间</th>
+		<th>操作</th>
+		<th></th>
+	</tr>
+	</thead>
+
+	<tbody>
+	{{range .Devices}}
+	<tr class="list-users">
+		<td>{{.ID}}</td>
+		<td>{{.DevName}}</td>
+		<td>{{.Description}}</td>
+		<td>{{.CreateTime}}</td>
+		<!-- <td><span class="label label-success">Active</span></td> -->
+		<td>
+			<div class="btn-group">
+			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="#"><i class="icon-pencil"></i> 编辑</a></li>
+					<li><a href="#"><i class="icon-trash"></i> 删除</a></li>
+					<!-- <li><a href="#"><i class="icon-user"></i> Details</a></li> -->
+					<!-- <li class="nav-header">Permissions</li>
+					<li><a href="#"><i class="icon-lock"></i> Make <strong>Admin</strong></a></li>
+					<li><a href="#"><i class="icon-lock"></i> Make <strong>Moderator</strong></a></li>
+					<li><a href="#"><i class="icon-lock"></i> Make <strong>User</strong></a></li> -->
+				</ul>
+			</div>
+		</td>
+	</tr>
+	{{end}}
+	</tbody>
+</table>
+<div class="pagination">
+	<ul>
+		<li><a href="#">Prev</a></li>
+		<li class="active">
+		<a href="#">1</a>
+		</li>
+		<li><a href="#">2</a></li>
+		<li><a href="#">3</a></li>
+		<li><a href="#">4</a></li>
+		<li><a href="#">Next</a></li>
+	</ul>
+</div>
+	<a href="new-user.html" class="btn btn-success">添加设备</a>
+</div>

@@ -27,7 +27,7 @@
                 </a>
                 <a class="brand" href="#">Admin</a>
                 <div class="btn-group pull-right">
-                    <a class="btn" href="my-profile.html"><i class="icon-user"></i> Admin</a>
+                    <a class="btn" href="my-profile.html"><i class="icon-user"></i> {{.User}}</a>
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <span class="caret"></span>
                     </a>
@@ -40,7 +40,7 @@
                 <div class="nav-collapse">
                     <ul class="nav">
                         <li><a href="/homepage">首页</a></li>
-                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">设备 <b class="caret"></b></a>
+                        <li class="dropdown"><a href="/mydevice" class="dropdown-toggle" data-toggle="dropdown">设备 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="new-user.html">新建设备</a></li>
                                 <li class="divider"></li>
@@ -67,7 +67,7 @@
                 <div class="well sidebar-nav">
                     <ul class="nav nav-list">
                         <li class="nav-header"><i class="icon-wrench"></i> 查看</li>
-                        <li><a href="users.html">我的设备</a></li>
+                        <li><a href="/mydevice">我的设备</a></li>
                         <li><a href="roles.html">传感器</a></li>
                         <li class="nav-header"><i class="icon-signal"></i>数据统计</li>
                         <li class="active"><a href="stats.html">实时数据</a></li>
@@ -96,7 +96,7 @@
         <hr>
 
         <footer class="well">
-            &copy; Admin <a href="http://www.mycodes.net/" target="_blank">源码之家</a>
+            &copy; You Will love it!<a href="/homepage" target="_blank">ORSkyCloud</a>
         </footer>
 
     </div>
