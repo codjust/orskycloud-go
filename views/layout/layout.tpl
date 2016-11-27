@@ -105,6 +105,7 @@
     <script src="static/js/jquery.flot.js"></script>
     <script src="static/js/jquery.flot.resize.js"></script>
     <script src="static/js/bootstrap.min.js"></script>
+     <script src="static/js/bootstrap-paginator.min.js"></script>
     {{.Scripts}}
  <!--    <script>
         $(function() {

@@ -13,4 +13,17 @@
 			$('tr.list-users td div ul').addClass('pull-right');
 		}
 	});
+
+ $(function () {
+    $("#page").bootstrapPaginator({
+      currentPage: '{{.Page.PageNo}}',
+      totalPages: '{{.Page.TotalPage}}',
+      bootstrapMajorVersion: 3,
+      size: "small",
+      onPageClicked: function(e,originalEvent,type,page){
+        window.location.href = "/?p=" + page
+      }
+    });
+  });
+
 </script>

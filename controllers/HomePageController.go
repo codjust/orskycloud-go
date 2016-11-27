@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"orskycloud-go/logicfunc"
 	"orskycloud-go/models"
+	"strconv"
 )
 
 type HomePageController struct {
@@ -30,9 +31,17 @@ func (this *HomePageController) HomePage() {
 
 func (this *HomePageController) MyDevice() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-	devices := models.ReturnAllDevices(username, password)
-	beego.Debug(devices)
-	this.Data["Devices"] = devices
+	// devices := models.ReturnAllDevices(username, password)
+	// beego.Debug(devices)
+
+	p, _ := strconv.Atoi(this.Ctx.Input.Query("p"))
+	if p == 0 {
+		p = 1
+	}
+	size, _ := beego.AppConfig.Int("page.size")
+	page := models.PageUser(p, size, username, password)
+	// this.Data["Devices"] = devices
+	this.Data["Page"] = page
 	this.Layout = "layout/layout.tpl"
 	this.TplName = "my_device.tpl"
 	this.LayoutSections = make(map[string]string)
