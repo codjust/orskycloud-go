@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/cache"
 	//"github.com/astaxie/beego/cache/redis"
 	"os"
+	"time"
 )
 
 var bm cache.Cache
@@ -37,6 +38,6 @@ func PutCache(key string, val interface{}, timeout time.Duration) error {
 }
 
 //Get(key string) interface{}
-func GetCache(key string) interface{
+func GetCache(key string) interface{} {
 	return bm.Get(key)
 }

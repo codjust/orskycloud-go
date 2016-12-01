@@ -3,7 +3,7 @@ package models
 import (
 	"github.com/astaxie/beego"
 	"github.com/bitly/go-simplejson" // for json get
-	//"orskycloud-go/cache_module"
+	"orskycloud-go/cache_module"
 	"orskycloud-go/utils"
 	"strings"
 )
@@ -48,23 +48,29 @@ func ReturnAllDevices(username, password string) ([]Device, int) {
 	return devices, count
 }
 
-func PageUser(p int, size int, username string, password string) utils.Page {
-	devices, count := ReturnAllDevices(username, password)
-	// var user User
-	// var list []User
-	// qs := o.QueryTable(user)
-	// count, _ := qs.Limit(-1).Count()
-	// qs.RelatedSel().OrderBy("-InTime").Limit(size).Offset((p - 1) * size).All(&list)
-	// c, _ := strconv.Atoi(strconv.FormatInt(count, 10))
-	return utils.PageUtil(count, p, size, devices)
+func PageUser(pageNo int, username string, password string) utils.Page {
+	devices, tp, count, pageSize := ReturnDeviceCacheData(username, password, pageNo)
+
+	// func PageUtil(count int, pageNo int, pageSize int, list interface{}) Page {
+	//     tp := count / pageSize
+	//     if count % pageSize > 0 {
+	//         tp = count / pageSize + 1
+	//     }
+	//     return Page{PageNo: pageNo, PageSize: pageSize, TotalPage: tp, TotalCount: count, FirstPage: pageNo == 1, LastPage: pageNo == tp, List: list}
+	// }
+
+	return utils.Page{PageNo: pageNo, PageSize: pageSize, TotalPage: tp, TotalCount: count, FirstPage: pageNo == 1, LastPage: pageNo == tp, List: devices}
 }
 
-func ReturnDeviceCacheData(username string, password string, pageNum int) []Device {
+func ReturnDeviceCacheData(username string, password string, pageNum int) (interface{}, int, int, int) {
 	key := beego.AppConfig.String("cache.device.key")
-	pageSize := beego.AppConfig.Int("page.size")
+	pageSize, _ := beego.AppConfig.Int("page.size")
+	var tp int
+	var ret_count int
 	if cache_module.IsExistCache(key) == false {
 		dev_list, count := ReturnAllDevices(username, password)
-		tp := count / pageSize
+		ret_count = count
+		tp = count / pageSize
 		lastPageSize := 0
 		if count%pageSize > 0 {
 			tp = count/pageSize + 1
@@ -87,5 +93,5 @@ func ReturnDeviceCacheData(username string, password string, pageNum int) []Devi
 	}
 
 	devices := cache_module.GetCache(key).([][]Device)
-	return devices[pageNum]
+	return devices[pageNum], tp, ret_count, pageSize
 }

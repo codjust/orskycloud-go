@@ -21,7 +21,7 @@
       bootstrapMajorVersion: 3,
       size: "small",
       onPageClicked: function(e,originalEvent,type,page){
-        window.location.href = "/?p=" + page
+        window.location.href = "/mydevice/" + page
       }
     });
   });

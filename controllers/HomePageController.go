@@ -5,6 +5,7 @@ import (
 	"orskycloud-go/cache_module"
 	"orskycloud-go/logicfunc"
 	"orskycloud-go/models"
+	"os"
 	"strconv"
 )
 
@@ -35,12 +36,19 @@ func (this *HomePageController) MyDevice() {
 	// devices := models.ReturnAllDevices(username, password)
 	// beego.Debug(devices)
 
-	p, _ := strconv.Atoi(this.Ctx.Input.Query("p"))
-	if p == 0 {
-		p = 1
+	beego.Debug("page:", this.Ctx.Input.Param(":page"))
+	var pageNum int
+	var err error
+	if this.Ctx.Input.Param(":page") == "" {
+		pageNum = 1
+	} else {
+		pageNum, err = strconv.Atoi(this.Ctx.Input.Param(":page"))
+		if err != nil {
+			beego.Debug("error:", err)
+			os.Exit(1)
+		}
 	}
-	size, _ := beego.AppConfig.Int("page.size")
-	page := models.PageUser(p, size, username, password)
+	page := models.PageUser(pageNum, username, password)
 	// this.Data["Devices"] = devices
 	this.Data["Page"] = page
 	this.Layout = "layout/layout.tpl"
