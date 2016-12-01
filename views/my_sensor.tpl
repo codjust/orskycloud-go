@@ -1,13 +1,14 @@
 <div class="row-fluid">
 	<div class="page-header">
-		<h1>设备 <small>全部设备</small></h1>
+		<h1>传感器 <small>全部传感器</small></h1>
 	</div>
 <table class="table table-striped table-bordered table-condensed">
 	<thead>
 	<tr>
-		<th>设备ID</th>
-		<th>设备名称</th>
-		<th>设备描述</th>
+		<th>传感器标示</th>
+		<th>所属设备</th>
+		<th>传感器名称</th>
+		<th>单位</th>
 		<th>创建时间</th>
 		<th>操作</th>
 		<th></th>
@@ -15,11 +16,12 @@
 	</thead>
 
 	<tbody>
-	{{range .Page.List}}
+	{{range .Sensor}}
 	<tr class="list-users">
-		<td>{{.ID}}</td>
-		<td>{{.DevName}}</td>
-		<td>{{.Description}}</td>
+		<td>{{.Name}}</td>
+		<td>{{.Device}}</td>
+		<td>{{.Designation}}</td>
+		<td>{{.Unit}}</td>
 		<td>{{.CreateTime}}</td>
 		<!-- <td><span class="label label-success">Active</span></td> -->
 		<td>
@@ -41,12 +43,7 @@
 	{{end}}
 	</tbody>
 </table>
-<div class="pagination">
+<!-- <div class="pagination">
 	<ul class="pagination" id="pagination0"><li></li></ul>
-	<!-- <ul ><li id="pagination0"></li></ul> -->
-</div>
-<div>
-
-	<!-- <a href="new-user.html" class="btn btn-success">添加设备</a> -->
-</div>
+</div> -->
 </div>

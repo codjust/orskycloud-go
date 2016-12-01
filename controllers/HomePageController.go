@@ -64,3 +64,17 @@ func (this *HomePageController) MyCache() {
 	cache_module.PutData()
 	beego.Debug("data:", cache_module.Get())
 }
+
+func (this *HomePageController) MySensor() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	//this.Data["Page"] = page
+	beego.Debug("xxxxxx")
+	sensors := models.ReturnSensorInfo(username, password)
+	this.Data["Sensor"] = sensors
+	this.Data["Active_Sensor"] = "active"
+	this.Layout = "layout/layout.tpl"
+	this.TplName = "my_sensor.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Scripts"] = "scripts/my_device_scripts.tpl"
+	this.Data["User"] = username
+}

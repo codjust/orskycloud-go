@@ -69,7 +69,7 @@
                     <ul class="nav nav-list">
                         <li class="nav-header"><i class="icon-wrench"></i> 查看</li>
                         <li class='{{.Active_Dev}}'><a href="/mydevice">我的设备</a></li>
-                        <li class='{{.Active}}'><a href="roles.html">传感器</a></li>
+                        <li class='{{.Active_Sensor}}'><a href="/mysensor">传感器</a></li>
                         <li class="nav-header"><i class="icon-signal"></i>数据统计</li>
                         <li class='{{.Active}}'><a href="stats.html">实时数据</a></li>
                         <li class='{{.Active}}'><a href="user-stats.html">历史走势</a></li>

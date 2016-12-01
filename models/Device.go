@@ -50,16 +50,7 @@ func ReturnAllDevices(username, password string) ([]Device, int) {
 
 func PageUser(pageNo int, username string, password string) utils.Page {
 	devices, tp, count, pageSize := ReturnDeviceCacheData(username, password, pageNo)
-
 	beego.Debug("dev:", devices, pageNo)
-	// func PageUtil(count int, pageNo int, pageSize int, list interface{}) Page {
-	//     tp := count / pageSize
-	//     if count % pageSize > 0 {
-	//         tp = count / pageSize + 1
-	//     }
-	//     return Page{PageNo: pageNo, PageSize: pageSize, TotalPage: tp, TotalCount: count, FirstPage: pageNo == 1, LastPage: pageNo == tp, List: list}
-	// }
-
 	return utils.Page{PageNo: pageNo, PageSize: pageSize, TotalPage: tp, TotalCount: count, FirstPage: pageNo == 1, LastPage: pageNo == tp, List: devices}
 }
 
@@ -70,7 +61,6 @@ func ReturnDeviceCacheData(username string, password string, pageNum int) (inter
 	var ret_count int
 	if cache_module.IsExistCache(key) == false {
 		dev_list, count := ReturnAllDevices(username, password)
-		beego.Debug("data1:", dev_list)
 		ret_count = count
 		tp = count / pageSize
 		lastPageSize := 0
@@ -84,17 +74,14 @@ func ReturnDeviceCacheData(username string, password string, pageNum int) (inter
 			if i == (tp-1) && lastPageSize != 0 {
 				cacheDevice[i] = make([]Device, lastPageSize)
 				temp := dev_list[(i * pageSize):(i*pageSize + lastPageSize)]
-				beego.Debug("data4:", temp, (i * pageSize), (i*pageSize + lastPageSize - 1), pageSize, tp)
 				copy(cacheDevice[i], temp)
 			} else {
 				cacheDevice[i] = make([]Device, pageSize)
 				temp := dev_list[(i * pageSize):(i*pageSize + pageSize)]
-				beego.Debug("data3:", temp, (i * pageSize), (i*pageSize + pageSize), pageSize, tp)
 				copy(cacheDevice[i], temp)
 			}
 		}
-		cache_module.PutCache(key, cacheDevice, 1000*1000)
-		beego.Debug("data2:", cacheDevice)
+		cache_module.PutCache(key, cacheDevice, 1000*1000*1000)
 	}
 
 	devices := cache_module.GetCache(key).([][]Device)
