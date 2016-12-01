@@ -16,7 +16,7 @@
 	</thead>
 
 	<tbody>
-	{{range .Sensor}}
+	{{range .Page.List}}
 	<tr class="list-users">
 		<td>{{.Name}}</td>
 		<td>{{.Device}}</td>
@@ -43,7 +43,7 @@
 	{{end}}
 	</tbody>
 </table>
-<!-- <div class="pagination">
-	<ul class="pagination" id="pagination0"><li></li></ul>
-</div> -->
+<div class="pagination">
+	<ul class="pagination" id="pagination0"></ul>
+</div>
 </div>

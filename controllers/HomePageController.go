@@ -48,7 +48,7 @@ func (this *HomePageController) MyDevice() {
 			os.Exit(1)
 		}
 	}
-	page := models.PageUser(pageNum, username, password)
+	page := models.PageDevice(pageNum, username, password)
 	// this.Data["Devices"] = devices
 	this.Data["Page"] = page
 	this.Data["Active_Dev"] = "active"
@@ -68,13 +68,23 @@ func (this *HomePageController) MyCache() {
 func (this *HomePageController) MySensor() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
 	//this.Data["Page"] = page
-	beego.Debug("xxxxxx")
-	sensors := models.ReturnSensorInfo(username, password)
-	this.Data["Sensor"] = sensors
+	var pageNum int
+	var err error
+	if this.Ctx.Input.Param(":page") == "" {
+		pageNum = 1
+	} else {
+		pageNum, err = strconv.Atoi(this.Ctx.Input.Param(":page"))
+		if err != nil {
+			beego.Debug("error:", err)
+			os.Exit(1)
+		}
+	}
+	sensors := models.PageSensor(pageNum, username, password)
+	this.Data["Page"] = sensors
 	this.Data["Active_Sensor"] = "active"
 	this.Layout = "layout/layout.tpl"
 	this.TplName = "my_sensor.tpl"
 	this.LayoutSections = make(map[string]string)
-	this.LayoutSections["Scripts"] = "scripts/my_device_scripts.tpl"
+	this.LayoutSections["Scripts"] = "scripts/my_sensor_scripts.tpl"
 	this.Data["User"] = username
 }

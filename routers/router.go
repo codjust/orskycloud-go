@@ -15,7 +15,7 @@ func init() {
 	beego.Router("/login/handler", &controllers.LoginController{}, "POST:LoginCheck")
 	beego.Router("/homepage", &controllers.HomePageController{}, "GET:HomePage")
 	beego.Router("/mydevice/?:page", &controllers.HomePageController{}, "GET:MyDevice")
-	beego.Router("/mysensor", &controllers.HomePageController{}, "GET:MySensor")
+	beego.Router("/mysensor/?:page", &controllers.HomePageController{}, "GET:MySensor")
 
 	beego.Router("/test", &controllers.HomePageController{}, "GET:MyCache")
 }

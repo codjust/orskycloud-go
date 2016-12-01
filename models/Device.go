@@ -48,7 +48,7 @@ func ReturnAllDevices(username, password string) ([]Device, int) {
 	return devices, count
 }
 
-func PageUser(pageNo int, username string, password string) utils.Page {
+func PageDevice(pageNo int, username string, password string) utils.Page {
 	devices, tp, count, pageSize := ReturnDeviceCacheData(username, password, pageNo)
 	beego.Debug("dev:", devices, pageNo)
 	return utils.Page{PageNo: pageNo, PageSize: pageSize, TotalPage: tp, TotalCount: count, FirstPage: pageNo == 1, LastPage: pageNo == tp, List: devices}
@@ -57,7 +57,7 @@ func PageUser(pageNo int, username string, password string) utils.Page {
 func ReturnDeviceCacheData(username string, password string, pageNum int) (interface{}, int, int, int) {
 	key := beego.AppConfig.String("cache.device.key")
 	pageSize, _ := beego.AppConfig.Int("page.size")
-	var tp int
+	var tp int //total page
 	var ret_count int
 	if cache_module.IsExistCache(key) == false {
 		dev_list, count := ReturnAllDevices(username, password)
