@@ -33,9 +33,6 @@ func (this *HomePageController) HomePage() {
 
 func (this *HomePageController) MyDevice() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-	// devices := models.ReturnAllDevices(username, password)
-	// beego.Debug(devices)
-
 	beego.Debug("page:", this.Ctx.Input.Param(":page"))
 	var pageNum int
 	var err error
@@ -87,4 +84,18 @@ func (this *HomePageController) MySensor() {
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["Scripts"] = "scripts/my_sensor_scripts.tpl"
 	this.Data["User"] = username
+}
+
+func (this *HomePageController) MyProfile() {
+
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	profile := models.ReturnProfileInfo(username, password)
+
+	this.Data["Profile"] = profile
+	this.Data["Active_Profile"] = "active"
+	this.Layout = "layout/layout.tpl"
+	this.TplName = "my_profile.tpl"
+	this.LayoutSections = make(map[string]string)
+	//this.LayoutSections["Scripts"] = "scripts/my_sensor_scripts.tpl"
+	this.Data["User"] = "Test"
 }
