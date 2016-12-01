@@ -41,7 +41,7 @@
                 <div class="nav-collapse">
                     <ul class="nav">
                         <li><a href="/homepage">首页</a></li>
-                        <li class="dropdown"><a href="/mydevice" class="dropdown-toggle" data-toggle="dropdown">设备 <b class="caret"></b></a>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">设备 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="new-user.html">新建设备</a></li>
                                 <li class="divider"></li>
@@ -68,15 +68,15 @@
                 <div class="well sidebar-nav">
                     <ul class="nav nav-list">
                         <li class="nav-header"><i class="icon-wrench"></i> 查看</li>
-                        <li><a href="/mydevice">我的设备</a></li>
-                        <li><a href="roles.html">传感器</a></li>
+                        <li class='{{.Active_Dev}}'><a href="/mydevice">我的设备</a></li>
+                        <li class='{{.Active}}'><a href="roles.html">传感器</a></li>
                         <li class="nav-header"><i class="icon-signal"></i>数据统计</li>
-                        <li class="active"><a href="stats.html">实时数据</a></li>
-                        <li><a href="user-stats.html">历史走势</a></li>
-                        <li><a href="visitor-stats.html">数据对比</a></li>
+                        <li class='{{.Active}}'><a href="stats.html">实时数据</a></li>
+                        <li class='{{.Active}}'><a href="user-stats.html">历史走势</a></li>
+                        <li class='{{.Active}}'><a href="visitor-stats.html">数据对比</a></li>
                         <li class="nav-header"><i class="icon-user"></i> 资料</li>
-                        <li><a href="my-profile.html">我的资料</a></li>
-                        <li><a href="#">修改密码</a></li>
+                        <li class='{{.Active}}'><a href="my-profile.html">我的资料</a></li>
+                        <li class='{{.Active}}'><a href="#">修改密码</a></li>
                         <li><a href="#">退出</a></li>
                     </ul>
                 </div>

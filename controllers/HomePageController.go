@@ -26,7 +26,7 @@ func (this *HomePageController) HomePage() {
 	this.Data["Last_login_time"] = last_logic_time
 	this.Data["User"] = username
 	this.Layout = "layout/layout.tpl"
-	this.TplName = "homepage.tpl"
+	this.TplName = "homepage.html"
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["Scripts"] = "scripts/home_scripts.tpl"
 }
@@ -51,6 +51,7 @@ func (this *HomePageController) MyDevice() {
 	page := models.PageUser(pageNum, username, password)
 	// this.Data["Devices"] = devices
 	this.Data["Page"] = page
+	this.Data["Active_Dev"] = "active"
 	this.Layout = "layout/layout.tpl"
 	this.TplName = "my_device.tpl"
 	this.LayoutSections = make(map[string]string)

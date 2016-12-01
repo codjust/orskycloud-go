@@ -28,6 +28,7 @@
 				<ul class="dropdown-menu">
 					<li><a href="#"><i class="icon-pencil"></i> 编辑</a></li>
 					<li><a href="#"><i class="icon-trash"></i> 删除</a></li>
+					<li><a href="#"><i class="icon-trash"></i> 新建</a></li>
 					<!-- <li><a href="#"><i class="icon-user"></i> Details</a></li> -->
 					<!-- <li class="nav-header">Permissions</li>
 					<li><a href="#"><i class="icon-lock"></i> Make <strong>Admin</strong></a></li>
@@ -41,7 +42,11 @@
 	</tbody>
 </table>
 <div class="pagination">
-	<ul class="pagination" id="pagination0"></ul>
+	<ul class="pagination" id="pagination0"><li></li></ul>
+	<!-- <ul ><li id="pagination0"></li></ul> -->
 </div>
-	<a href="new-user.html" class="btn btn-success">添加设备</a>
+<div>
+
+	<!-- <a href="new-user.html" class="btn btn-success">添加设备</a> -->
+</div>
 </div>
