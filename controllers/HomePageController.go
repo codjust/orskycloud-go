@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"orskycloud-go/cache_module"
 	"orskycloud-go/logicfunc"
 	"orskycloud-go/models"
 	"strconv"
@@ -47,4 +48,9 @@ func (this *HomePageController) MyDevice() {
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["Scripts"] = "scripts/my_device_scripts.tpl"
 	this.Data["User"] = username
+}
+
+func (this *HomePageController) MyCache() {
+	cache_module.PutData()
+	beego.Debug("data:", cache_module.Get())
 }
