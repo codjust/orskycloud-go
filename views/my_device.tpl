@@ -41,7 +41,7 @@
 	</tbody>
 </table>
 <div class="pagination">
-	<ul id="page"></ul>
+	<ul class="pagination" id="pagination0"></ul>
 </div>
 	<a href="new-user.html" class="btn btn-success">添加设备</a>
 </div>
