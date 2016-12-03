@@ -2,12 +2,12 @@
 	<div class="page-header">
 		<h1>My profile <small>Update info</small></h1>
 	</div>
-		<form class="form-horizontal">
+		<form class="form-horizontal" method = "post" action = >
 			<fieldset>
 				<div class="control-group">
 					<label class="control-label" for="username">UserName:</label>
 						<div class="controls">
-						<input type="text" class="input-xlarge" id="name" value='{{.Profile.UserName}}' />
+						<input type="text" class="input-xlarge" id="username" value='{{.Profile.UserName}}' />
 						</div>
 				</div>
 				<div class="control-group">
@@ -41,7 +41,7 @@
 						</div>
 				</div>
 				<div class="form-actions">
-						<input type="submit" class="btn btn-success btn-large" value="Save Changes" />
+						<input type="button" class="btn btn-success btn-large" value="Save Changes" onclick="SubmitProfileInfo()" />
 				</div>
 				</fieldset>
 		</form>
