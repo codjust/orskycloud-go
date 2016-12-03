@@ -10,21 +10,22 @@ function SubmitNewDevice(){
 	}
 
 	alert("确认添加设备：" + DeviceName + "?")
-	$ajax({
+	$.ajax({
 		async: false,
 		type:"POST",
 		url:"/mydevice/create",
-		data:{"devicename" : DeviceName, "description" : Description}
+		data:{"devicename": DeviceName,"description": Description}
 		}).done(function(msg){
 		if(msg.Val == "success")
 		{
-			alert("新建成功！")
-			window.location.href = "/updatepwd"
+			alert("更新成功！")
+			window.location.href = "/mydevice"
 		}
 		else if(msg.Val == "failed")
 		{
-			alert("新建失败，数据库操作错误，请重试！")
+			alert("更新失败，数据库操作错误，请重试！")
 		}
+
 	});
 }
 

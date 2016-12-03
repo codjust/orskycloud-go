@@ -1,7 +1,7 @@
 package models
 
 import (
-	"encoding/json"
+	//"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/bitly/go-simplejson" // for json get
 	"orskycloud-go/cache_module"
@@ -19,9 +19,9 @@ type Device struct {
 }
 
 type DeviceJson struct {
-	DevName     string
-	Description string
-	CreateTime  string
+	deviceName  string
+	description string
+	createTime  string
 	Sensor      []*Device
 	data        []*Device
 }
@@ -101,8 +101,11 @@ func ReturnDeviceCacheData(username string, password string, pageNum int) (inter
 
 func CreateNewDevice(username string, password string, dev_info Device) string {
 	localtime := time.Now().Format("2006-01-02 15:04:05")
-	exp_data := DeviceJson{DevName: dev_info.DevName, Description: dev_info.Description, CreateTime: localtime, Sensor: []*Device{}, data: []*Device{}}
-	exp_json, _ := json.Marshal(exp_data)
+	//	exp_data := DeviceJson{deviceName: dev_info.DevName, description: dev_info.Description, createTime: localtime, Sensor: []*Device{}, data: []*Device{}}
+	//	exp_json, _ := json.Marshal(exp_data)
+
+	exp_json := "{\"deviceName\":\"" + dev_info.DevName + "\",\"description\":\"" + dev_info.Description + "\",\"createTime\":\"" + localtime + "\",\"Sensor\":[],\"data\":[]}"
+
 	beego.Debug("json:", exp_json)
 	client, err := red.Get()
 	ErrHandlr(err)
