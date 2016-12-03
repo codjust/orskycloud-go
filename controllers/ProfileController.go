@@ -1,10 +1,8 @@
-package Controller
+package controllers
 
 import (
 	"github.com/astaxie/beego"
 	"orskycloud-go/models"
-	"os"
-	"strconv"
 )
 
 type ProfileController struct {
@@ -21,19 +19,23 @@ func (this *ProfileController) MyProfile() {
 	this.Layout = "layout/layout.tpl"
 	this.TplName = "my_profile.tpl"
 	this.LayoutSections = make(map[string]string)
-	//this.LayoutSections["Scripts"] = "scripts/my_sensor_scripts.tpl"
-	this.Data["User"] = "Test"
+	this.LayoutSections["Scripts"] = "scripts/profile_script.tpl"
+	this.Data["User"] = username
 }
 
 func (this *ProfileController) Update() {
 	username, phone, email := this.GetString("username"), this.GetString("phone"), this.GetString("email")
 	user, pwd := this.GetSession("username").(string), this.GetSession("password").(string)
-	profile := models.Profile{UserName: username, Phone: phone, EMail: eamil}
+	profile := models.Profile{UserName: username, Phone: phone, EMail: email}
 
 	res := models.UpdataProfileInfo(user, pwd, profile)
+	if res == "success" {
+		//更新session
+		this.SetSession("username", username)
+	}
 	result := struct {
 		Val string
-	}(res)
+	}{res}
 	this.Data["json"] = &result
 	this.ServeJSON()
 }

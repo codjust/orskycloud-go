@@ -32,21 +32,24 @@ func ReturnProfileInfo(username string, password string) Profile {
 	return ProfileInfo
 }
 
-func UpdataProfileInfo(username string, password string, profile Profile) {
+func UpdataProfileInfo(username string, password string, profile Profile) string {
 	client, err := red.Get()
 	ErrHandlr(err)
 
 	//key := username + "#" + comm.Md5_go(password)
 	key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
+	newKey := profile.UserName + "#" + password
 	client.Cmd("multi")
 	client.Cmd("hset", "uid:"+userkey, "username", profile.UserName)
 	client.Cmd("hset", "uid:"+userkey, "phone", profile.Phone)
 	client.Cmd("hset", "uid:"+userkey, "email", profile.EMail)
+	client.Cmd("hset", "User", newKey, userkey)
+	client.Cmd("hdel", "User", key)
 	ret := client.Cmd("exec").String()
 	var ret_msg string
 	ret_msg = "success"
-	if ret == nil {
+	if ret == "" {
 		ret_msg = "failed"
 		//ErrHandlr("redis exec failed!")
 	}
