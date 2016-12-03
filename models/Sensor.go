@@ -58,6 +58,7 @@ func ReturnSensorInfo(username string, password string) ([]Sensor, int) {
 		}
 	}
 
+	red.Put(client)
 	beego.Debug("data:", SensorInfo)
 	return SensorInfo, count
 

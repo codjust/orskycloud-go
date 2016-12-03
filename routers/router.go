@@ -19,5 +19,7 @@ func init() {
 	beego.Router("/myprofile", &controllers.ProfileController{}, "GET:MyProfile")
 	beego.Router("/myprofile/update", &controllers.ProfileController{}, "POST:Update")
 	//beego.Router("/myprofile/check", &controllers.ProfileController{}, "POST:Check")
+	beego.Router("/updatepwd", &controllers.ProfileController{}, "GET:UpdatePwd")
+	beego.Router("/updatepwd/modify", &controllers.ProfileController{}, "POST:UpdatePwdModify")
 	beego.Router("/test", &controllers.HomePageController{}, "GET:MyCache")
 }

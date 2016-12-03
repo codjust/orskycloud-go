@@ -28,12 +28,12 @@
                 </a>
                 <a class="brand" href="/homepage">Admin</a>
                 <div class="btn-group pull-right">
-                    <a class="btn" href="my-profile.html"><i class="icon-user"></i> {{.User}}</a>
+                    <a class="btn" href="/myprofile"><i class="icon-user"></i> {{.User}}</a>
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="my-profile.html">个人资料</a></li>
+                        <li><a href="/myprofile">个人资料</a></li>
                         <li class="divider"></li>
                         <li><a href="#">退出</a></li>
                     </ul>
@@ -76,7 +76,7 @@
                         <li class='{{.Active}}'><a href="visitor-stats.html">数据对比</a></li>
                         <li class="nav-header"><i class="icon-user"></i> 资料</li>
                         <li class='{{.Active_Profile}}'><a href="/myprofile">我的资料</a></li>
-                        <li class='{{.Active}}'><a href="#">修改密码</a></li>
+                        <li class='{{.Active_UpdatePwd}}'><a href="/updatepwd">修改密码</a></li>
                         <li><a href="#">退出</a></li>
                     </ul>
                 </div>

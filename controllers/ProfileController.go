@@ -39,3 +39,33 @@ func (this *ProfileController) Update() {
 	this.Data["json"] = &result
 	this.ServeJSON()
 }
+
+func (this *ProfileController) UpdatePwd() {
+	username := this.GetSession("username").(string)
+	password := this.GetSession("password").(string)
+	this.Data["Active_UpdatePwd"] = "active"
+	this.Layout = "layout/layout.tpl"
+	this.TplName = "updatepwd.tpl"
+	this.Data["Pwd"] = password
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Scripts"] = "scripts/updatepwd_scripts.tpl"
+	this.Data["User"] = username
+}
+
+func (this *ProfileController) UpdatePwdModify() {
+	beego.Debug("pwd:.....")
+	username := this.GetSession("username").(string)
+	password := this.GetSession("password").(string)
+	newpwd := this.GetString("newpwd")
+
+	res := models.ModifyPwd(username, password, newpwd)
+	if res == "success" {
+		//更新session
+		this.SetSession("password", newpwd)
+	}
+	result := struct {
+		Val string
+	}{res}
+	this.Data["json"] = &result
+	this.ServeJSON()
+}

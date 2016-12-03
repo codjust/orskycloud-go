@@ -29,6 +29,8 @@ func ReturnProfileInfo(username string, password string) Profile {
 	ProfileInfo.DevCount, _ = client.Cmd("hget", "uid:"+userkey, "count").Str()
 	ProfileInfo.SignTime, _ = client.Cmd("hget", "uid:"+userkey, "sign_up_time").Str()
 
+	red.Put(client)
+
 	return ProfileInfo
 }
 
@@ -47,6 +49,30 @@ func UpdataProfileInfo(username string, password string, profile Profile) string
 	client.Cmd("hset", "User", newKey, userkey)
 	client.Cmd("hdel", "User", key)
 	ret := client.Cmd("exec").String()
+	red.Put(client)
+	var ret_msg string
+	ret_msg = "success"
+	if ret == "" {
+		ret_msg = "failed"
+		//ErrHandlr("redis exec failed!")
+	}
+	return ret_msg
+}
+
+func ModifyPwd(username string, password string, newpwd string) string {
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	newKey := username + "#" + newpwd
+	client.Cmd("multi")
+	client.Cmd("hset", "uid:"+userkey, "password", newpwd)
+	client.Cmd("hset", "User", newKey, userkey)
+	client.Cmd("hdel", "User", key)
+	ret := client.Cmd("exec").String()
+	red.Put(client)
 	var ret_msg string
 	ret_msg = "success"
 	if ret == "" {

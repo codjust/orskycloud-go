@@ -16,7 +16,7 @@ type HomePageController struct {
 func (this *HomePageController) HomePage() {
 	//这里要判断一下是否登录isLogin
 
-	this.SetSession("username", "john")
+	this.SetSession("username", "John")
 	this.SetSession("password", "123456")
 
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
