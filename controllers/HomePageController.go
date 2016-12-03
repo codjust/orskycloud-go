@@ -17,7 +17,7 @@ func (this *HomePageController) HomePage() {
 	//这里要判断一下是否登录isLogin
 
 	this.SetSession("username", "John")
-	this.SetSession("password", "123456")
+	this.SetSession("password", "1234567")
 
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
 	beego.Debug(username, password)
@@ -31,31 +31,31 @@ func (this *HomePageController) HomePage() {
 	this.LayoutSections["Scripts"] = "scripts/home_scripts.tpl"
 }
 
-func (this *HomePageController) MyDevice() {
-	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-	beego.Debug("page:", this.Ctx.Input.Param(":page"))
-	var pageNum int
-	var err error
-	if this.Ctx.Input.Param(":page") == "" {
-		pageNum = 1
-	} else {
-		pageNum, err = strconv.Atoi(this.Ctx.Input.Param(":page"))
-		if err != nil {
-			beego.Debug("error:", err)
-			os.Exit(1)
-		}
-	}
-	page := models.PageDevice(pageNum, username, password)
-	// this.Data["Devices"] = devices
-	this.Data["Page"] = page
-	this.Data["Active_Dev"] = "active"
-	this.Layout = "layout/layout.tpl"
-	this.TplName = "my_device.tpl"
-	this.LayoutSections = make(map[string]string)
-	this.LayoutSections["Scripts"] = "scripts/my_device_scripts.tpl"
-	this.Data["User"] = username
+// func (this *HomePageController) MyDevice() {
+// 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+// 	beego.Debug("page:", this.Ctx.Input.Param(":page"))
+// 	var pageNum int
+// 	var err error
+// 	if this.Ctx.Input.Param(":page") == "" {
+// 		pageNum = 1
+// 	} else {
+// 		pageNum, err = strconv.Atoi(this.Ctx.Input.Param(":page"))
+// 		if err != nil {
+// 			beego.Debug("error:", err)
+// 			os.Exit(1)
+// 		}
+// 	}
+// 	page := models.PageDevice(pageNum, username, password)
+// 	// this.Data["Devices"] = devices
+// 	this.Data["Page"] = page
+// 	this.Data["Active_Dev"] = "active"
+// 	this.Layout = "layout/layout.tpl"
+// 	this.TplName = "my_device.tpl"
+// 	this.LayoutSections = make(map[string]string)
+// 	this.LayoutSections["Scripts"] = "scripts/my_device_scripts.tpl"
+// 	this.Data["User"] = username
 
-}
+// }
 
 func (this *HomePageController) MyCache() {
 	cache_module.PutData()

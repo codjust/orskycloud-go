@@ -43,7 +43,7 @@
                         <li><a href="/homepage">首页</a></li>
                         <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">设备 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="new-user.html">新建设备</a></li>
+                                <li><a href="/mydevice/newdevice">新建设备</a></li>
                                 <li class="divider"></li>
                                 <li><a href="/mydevice">设备管理</a></li>
                             </ul>

@@ -1,11 +1,14 @@
 package models
 
 import (
+	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/bitly/go-simplejson" // for json get
 	"orskycloud-go/cache_module"
+	"orskycloud-go/comm"
 	"orskycloud-go/utils"
 	"strings"
+	"time"
 )
 
 type Device struct {
@@ -13,6 +16,14 @@ type Device struct {
 	DevName     string
 	Description string
 	CreateTime  string
+}
+
+type DeviceJson struct {
+	DevName     string
+	Description string
+	CreateTime  string
+	Sensor      []*Device
+	data        []*Device
 }
 
 func ReturnAllDevices(username, password string) ([]Device, int) {
@@ -86,4 +97,35 @@ func ReturnDeviceCacheData(username string, password string, pageNum int) (inter
 
 	devices := cache_module.GetCache(key).([][]Device)
 	return devices[pageNum-1], tp, ret_count, pageSize
+}
+
+func CreateNewDevice(username string, password string, dev_info Device) string {
+	localtime := time.Now().Format("2006-01-02 15:04:05")
+	exp_data := DeviceJson{DevName: dev_info.DevName, Description: dev_info.Description, CreateTime: localtime, Sensor: []*Device{}, data: []*Device{}}
+	exp_json, _ := json.Marshal(exp_data)
+	beego.Debug("json:", exp_json)
+	client, err := red.Get()
+	ErrHandlr(err)
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+
+	// get did
+	did := client.Cmd("hincrby", "uid:"+userkey, "nextDeviceId", 1).String()
+	did = comm.Md5_go(did)
+	device_list := client.Cmd("hget", "uid:"+userkey, "device").String()
+	device_list = device_list + "#" + did
+	client.Cmd("multi")
+	client.Cmd("hset", "uid:"+userkey, "device", device_list)
+	client.Cmd("hset", "uid:"+userkey, "did:"+did, exp_json)
+	client.Cmd("hincrby", "uid:"+userkey, "count", 1)
+	ret := client.Cmd("exec").String()
+	red.Put(client)
+	var ret_msg string
+	ret_msg = "success"
+	if ret == "" {
+		ret_msg = "failed"
+		//ErrHandlr("redis exec failed!")
+	}
+	return ret_msg
 }
