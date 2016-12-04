@@ -63,3 +63,14 @@ func (this *DeviceController) CreateDevice() {
 	this.Data["json"] = &result
 	this.ServeJSON()
 }
+
+func (this *DeviceController) DeleteDevice() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	did := this.GetString("did")
+	res := models.DeleteDeviceOp(username, password, did)
+	result := struct {
+		Val string
+	}{res}
+	this.Data["json"] = &result
+	this.ServeJSON()
+}

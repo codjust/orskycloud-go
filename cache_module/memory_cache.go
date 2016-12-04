@@ -41,3 +41,11 @@ func PutCache(key string, val interface{}, timeout time.Duration) error {
 func GetCache(key string) interface{} {
 	return bm.Get(key)
 }
+
+func DeleteCache(key string) {
+	err := bm.Delete(key)
+	if err != nil {
+		beego.Debug("delete cache failed.cache name:", key)
+		os.Exit(1)
+	}
+}

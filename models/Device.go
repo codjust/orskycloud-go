@@ -37,11 +37,15 @@ func ReturnAllDevices(username, password string) ([]Device, int) {
 	key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
+	beego.Debug("list:", device_list_temp)
 	devices_list := strings.Split(device_list_temp, "#")
-
+	beego.Debug("devices_list:", devices_list)
 	for _, dev := range devices_list {
+		beego.Debug("dev:", dev)
 		count++
 		dev_info, _ := client.Cmd("hget", "uid:"+userkey, "did:"+dev).Str()
+		beego.Debug("hget:", "hget"+"uid:"+userkey+"did:"+dev)
+		beego.Debug("device:", dev_info)
 		dev_json, err := simplejson.NewJson([]byte(dev_info))
 		beego.Debug("error:", err)
 		ErrHandlr(err)
@@ -71,6 +75,7 @@ func ReturnDeviceCacheData(username string, password string, pageNum int) (inter
 	var tp int //total page
 	var ret_count int
 	if cache_module.IsExistCache(key) == false {
+		beego.Debug("Not Cache")
 		dev_list, count := ReturnAllDevices(username, password)
 		ret_count = count
 		tp = count / pageSize
@@ -131,4 +136,46 @@ func CreateNewDevice(username string, password string, dev_info Device) string {
 		//ErrHandlr("redis exec failed!")
 	}
 	return ret_msg
+}
+
+func DeleteDeviceOp(username string, password string, did string) string {
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
+	devices_list := strings.Split(device_list_temp, "#")
+	var dev_temp string
+	for _, dev_id := range devices_list {
+		if dev_id != did {
+			if dev_temp == "" {
+				dev_temp = dev_id
+			} else {
+				dev_temp = dev_temp + "#" + dev_id
+			}
+		}
+	}
+	beego.Debug("newDevicelist:", dev_temp)
+	//client.Cmd("multi")
+	client.Cmd("hset", "uid:"+userkey, "device", dev_temp)
+	client.Cmd("hdel", "uid:"+userkey, "did:"+did)
+	client.Cmd("hincrby", "uid:"+userkey, "count", -1)
+	//ret := client.Cmd("exec").String()
+	//	beego.Debug("exec ret:", ret)
+	red.Put(client)
+
+	//删除数据库数据之后同时需要删除缓存，下次重新载入
+	cache_key := beego.AppConfig.String("cache.device.key")
+	cache_module.DeleteCache(cache_key)
+
+	var ret_msg string
+	ret_msg = "success"
+	//if ret == "" {
+	//	ret_msg = "failed"
+	//ErrHandlr("redis exec failed!")
+	//}
+	return ret_msg
+
 }
