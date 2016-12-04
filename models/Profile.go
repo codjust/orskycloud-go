@@ -42,13 +42,20 @@ func UpdataProfileInfo(username string, password string, profile Profile) string
 	key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	newKey := profile.UserName + "#" + password
+	beego.Debug("newKey:", newKey)
 	client.Cmd("multi")
-	client.Cmd("hset", "uid:"+userkey, "username", profile.UserName)
-	client.Cmd("hset", "uid:"+userkey, "phone", profile.Phone)
-	client.Cmd("hset", "uid:"+userkey, "email", profile.EMail)
-	client.Cmd("hset", "User", newKey, userkey)
-	client.Cmd("hdel", "User", key)
+	r := client.Cmd("hset", "uid:"+userkey, "username", profile.UserName)
+	ErrHandlr(r.Err)
+	r = client.Cmd("hset", "uid:"+userkey, "phone", profile.Phone)
+	ErrHandlr(r.Err)
+	r = client.Cmd("hset", "uid:"+userkey, "email", profile.EMail)
+	ErrHandlr(r.Err)
+	r = client.Cmd("hdel", "User", key)
+	ErrHandlr(r.Err)
+	r = client.Cmd("hset", "User", newKey, userkey)
+	ErrHandlr(r.Err)
 	ret := client.Cmd("exec").String()
+	beego.Debug("exec:", ret)
 	red.Put(client)
 	var ret_msg string
 	ret_msg = "success"
@@ -69,8 +76,8 @@ func ModifyPwd(username string, password string, newpwd string) string {
 	newKey := username + "#" + newpwd
 	client.Cmd("multi")
 	client.Cmd("hset", "uid:"+userkey, "password", newpwd)
-	client.Cmd("hset", "User", newKey, userkey)
 	client.Cmd("hdel", "User", key)
+	client.Cmd("hset", "User", newKey, userkey)
 	ret := client.Cmd("exec").String()
 	red.Put(client)
 	var ret_msg string
