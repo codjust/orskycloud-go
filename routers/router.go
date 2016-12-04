@@ -22,7 +22,9 @@ func init() {
 	beego.Router("/mydevice/edit/?:did", &controllers.DeviceController{}, "GET:EditDevice")
 	beego.Router("/mydevice/edit/modify", &controllers.DeviceController{}, "POST:EditDeviceModify")
 
-	beego.Router("/mysensor/?:page", &controllers.HomePageController{}, "GET:MySensor")
+	beego.Router("/mysensor/?:page", &controllers.SensorController{}, "GET:MySensor")
+	beego.Router("/mysensor/newdevice", &controllers.SensorController{}, "GET:NewSensor")
+
 	beego.Router("/myprofile", &controllers.ProfileController{}, "GET:MyProfile")
 	beego.Router("/myprofile/update", &controllers.ProfileController{}, "POST:Update")
 	//beego.Router("/myprofile/check", &controllers.ProfileController{}, "POST:Check")

@@ -50,7 +50,7 @@
                         </li>
                         <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">传感器 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="new-role.html">新建传感器</a></li>
+                                <li><a href="/mysensor/newdevice">新建传感器</a></li>
                                 <li class="divider"></li>
                                 <li><a href="/mysensor">传感器管理</a></li>
                             </ul>
