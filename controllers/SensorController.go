@@ -44,11 +44,31 @@ func (this *SensorController) MySensor() {
 
 func (this *SensorController) NewSensor() {
 	//this.Data["Active_Sensor"] = "active"
-	username := this.GetSession("username")
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+
+	d_list := models.ReturnDevList(username, password)
+
+	this.Data["DList"] = d_list
 	this.Layout = "layout/layout.tpl"
 	this.TplName = "newsensor.tpl"
 	this.LayoutSections = make(map[string]string)
-	//this.LayoutSections["Scripts"] = "scripts/my_sensor_scripts.tpl"
+	this.LayoutSections["Scripts"] = "scripts/newsensor_scripts.tpl"
 	this.Data["User"] = username
 
+}
+
+func (this *SensorController) CreateSensor() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	var new_sensor models.Sensor
+	new_sensor.Name = this.GetString("name")
+	new_sensor.Designation = this.GetString("designation")
+	new_sensor.Unit = this.GetString("unit")
+	new_sensor.Did = this.GetString("did")
+
+	res := models.CreateNewSensor(username, password, new_sensor)
+	result := struct {
+		Val string
+	}{res}
+	this.Data["json"] = &result
+	this.ServeJSON()
 }

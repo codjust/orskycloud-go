@@ -10,10 +10,17 @@ import (
 
 type Sensor struct {
 	Name        string
+	Did         string
 	Device      string
 	Designation string
 	Unit        string
 	CreateTime  string
+}
+
+//临时设备信息结构体
+type Dev_Temp struct {
+	Did        string
+	DeviceName string
 }
 
 func Get_json_array_len(data *simplejson.Json) int {
@@ -102,4 +109,30 @@ func PageSensor(pageNo int, username string, password string) utils.Page {
 	sensors, tp, count, pageSize := ReturnSensorCacheData(username, password, pageNo)
 	beego.Debug("dev:", sensors, pageNo)
 	return utils.Page{PageNo: pageNo, PageSize: pageSize, TotalPage: tp, TotalCount: count, FirstPage: pageNo == 1, LastPage: pageNo == tp, List: sensors}
+}
+
+func ReturnDevList(username, password string) []Dev_Temp {
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	var d_list []Dev_Temp
+	var dev_temp Dev_Temp
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
+	devices_list := strings.Split(device_list_temp, "#")
+	//	beego.Debug("List1:", devices_list)
+	for _, v := range devices_list {
+		//dev_temp.DeviceName = client.Cmd("hget", "uid:"+userkey, "did:"+v, "deviceName").String()
+		dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+v).String()
+		dev_json, err := simplejson.NewJson([]byte(dev_info))
+		ErrHandlr(err)
+		dev_temp.DeviceName, err = dev_json.Get("deviceName").String()
+		ErrHandlr(err)
+		dev_temp.Did = v
+		d_list = append(d_list, dev_temp)
+	}
+
+	//beego.Debug("List:", d_list)
+	return d_list
 }

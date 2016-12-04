@@ -19,21 +19,21 @@
 				<div class="control-group">
 					<label class="control-label" for="phone">单位:</label>
 						<div class="controls">
-							<input type="text" class="input-xlarge" id="againsure" value="" />
+							<input type="text" class="input-xlarge" id="unit" value="" />
 						</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="role">所属设备：</label>
 					<div class="controls">
-						<select id="role">
-							<option value="admin">Admin</option>
-							<option value="mod">Moderator</option>
-							<option value="user" selected>User</option>
-							</select>
+						<select id="did">
+						{{range .DList}}
+							<option value= '{{.Did}}'>{{.DeviceName}}</option>
+						{{end}}
+						</select>
 						</div>
 					</div>
 				<div class="form-actions">
-						<input type="button" class="btn btn-success btn-large" value="确定修改" onclick="SubmitModifyPwd()" />
+						<input type="button" class="btn btn-success btn-large" value="确定添加" onclick="SubmitNewSensor()" />
 				</div>
 				</fieldset>
 		</form>
