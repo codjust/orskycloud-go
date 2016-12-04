@@ -43,9 +43,14 @@ func GetCache(key string) interface{} {
 }
 
 func DeleteCache(key string) {
-	err := bm.Delete(key)
-	if err != nil {
-		beego.Debug("delete cache failed.cache name:", key)
-		os.Exit(1)
+	if IsExistCache(key) {
+		err := bm.Delete(key)
+		if err != nil {
+			beego.Debug("delete cache failed.cache name:", key)
+			os.Exit(1)
+		}
+	} else {
+		beego.Debug("cache not exist")
 	}
+
 }

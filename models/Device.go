@@ -157,13 +157,18 @@ func DeleteDeviceOp(username string, password string, did string) string {
 			}
 		}
 	}
+	beego.Debug("delete did:", did)
 	beego.Debug("newDevicelist:", dev_temp)
-	//client.Cmd("multi")
-	client.Cmd("hset", "uid:"+userkey, "device", dev_temp)
-	client.Cmd("hdel", "uid:"+userkey, "did:"+did)
-	client.Cmd("hincrby", "uid:"+userkey, "count", -1)
-	//ret := client.Cmd("exec").String()
-	//	beego.Debug("exec ret:", ret)
+	client.Cmd("multi")
+	r := client.Cmd("hset", "uid:"+userkey, "device", dev_temp)
+	beego.Debug("op key dev:", "hset "+"uid:"+userkey+"device "+dev_temp)
+	ErrHandlr(r.Err)
+	r = client.Cmd("hdel", "uid:"+userkey, "did:"+did)
+	ErrHandlr(r.Err)
+	r = client.Cmd("hincrby", "uid:"+userkey, "count", -1)
+	ErrHandlr(r.Err)
+	ret := client.Cmd("exec").String()
+	beego.Debug("exec ret:", ret)
 	red.Put(client)
 
 	//删除数据库数据之后同时需要删除缓存，下次重新载入
@@ -172,10 +177,10 @@ func DeleteDeviceOp(username string, password string, did string) string {
 
 	var ret_msg string
 	ret_msg = "success"
-	//if ret == "" {
-	//	ret_msg = "failed"
-	//ErrHandlr("redis exec failed!")
-	//}
+	if ret == "" {
+		ret_msg = "failed"
+		//ErrHandlr("redis exec failed!")
+	}
 	return ret_msg
 
 }

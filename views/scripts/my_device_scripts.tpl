@@ -27,15 +27,17 @@
   });
 
 
-function SubmitDeleteDevice(){
+function SubmitDeleteDevice(did){
 
+	var Did = did
 	var isDelete = confirm("确定要删除该设备吗？");
+//	alert("did:",Did)
 	if(isDelete == true){
 		$.ajax({
 		async: false,
 		type:"POST",
 		url:"/mydevice/delete",
-		data:{"did": {{.ID}}}
+		data:{"did": did}
 		}).done(function(msg){
 		if(msg.Val == "success")
 		{
