@@ -37,15 +37,13 @@ func ReturnAllDevices(username, password string) ([]Device, int) {
 	key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
-	beego.Debug("list:", device_list_temp)
+	//beego.Debug("list:", device_list_temp)
 	devices_list := strings.Split(device_list_temp, "#")
-	beego.Debug("devices_list:", devices_list)
+	//beego.Debug("devices_list:", devices_list)
 	for _, dev := range devices_list {
 		beego.Debug("dev:", dev)
 		count++
 		dev_info, _ := client.Cmd("hget", "uid:"+userkey, "did:"+dev).Str()
-		beego.Debug("hget:", "hget"+"uid:"+userkey+"did:"+dev)
-		beego.Debug("device:", dev_info)
 		dev_json, err := simplejson.NewJson([]byte(dev_info))
 		beego.Debug("error:", err)
 		ErrHandlr(err)
@@ -183,4 +181,51 @@ func DeleteDeviceOp(username string, password string, did string) string {
 	}
 	return ret_msg
 
+}
+
+func ReturnByIdDeviceInfo(username string, password string, did string) Device {
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+did).String()
+	dev_json, err := simplejson.NewJson([]byte(dev_info))
+	beego.Debug("error:", err)
+	ErrHandlr(err)
+	var device Device
+	device.DevName, err = dev_json.Get("deviceName").String()
+	ErrHandlr(err)
+	device.Description, err = dev_json.Get("description").String()
+	ErrHandlr(err)
+	red.Put(client)
+
+	return device
+}
+
+func UpdateDeviceInfo(username string, password string, dev_info Device) string {
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	deviceInfo := client.Cmd("hget", "uid:"+userkey, "did:"+dev_info.ID).String()
+	dev_json, err := simplejson.NewJson([]byte(deviceInfo))
+	beego.Debug("error:", err)
+	ErrHandlr(err)
+	dev_json.Set("deviceName", dev_info.DevName)
+	dev_json.Set("description", dev_info.Description)
+
+	new_dev, err := dev_json.MarshalJSON()
+	ErrHandlr(err)
+
+	r := client.Cmd("hset", "uid:"+userkey, "did:"+dev_info.ID, new_dev)
+	ret_msg := "success"
+	if r.Err != nil {
+		ret_msg = "failed"
+	}
+	red.Put(client)
+	return ret_msg
 }

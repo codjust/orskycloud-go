@@ -74,3 +74,37 @@ func (this *DeviceController) DeleteDevice() {
 	this.Data["json"] = &result
 	this.ServeJSON()
 }
+
+func (this *DeviceController) EditDevice() {
+	did := this.Ctx.Input.Param(":did")
+	beego.Debug("did:", did)
+
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+
+	ret_data := models.ReturnByIdDeviceInfo(username, password, did)
+
+	ret_data.ID = did
+	beego.Debug("ret_data:", ret_data)
+	this.Data["DeviceName"] = ret_data.DevName
+	this.Data["Description"] = ret_data.Description
+	this.Data["Did"] = ret_data.ID
+	this.Layout = "layout/layout.tpl"
+	this.TplName = "editdevice.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Scripts"] = "scripts/editdevice_scripts.tpl"
+	this.Data["User"] = username
+
+}
+
+func (this *DeviceController) EditDeviceModify() {
+	var dev models.Device
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	dev.DevName, dev.Description = this.GetString("devicename"), this.GetString("description")
+	dev.ID = this.GetString("did")
+	res := models.UpdateDeviceInfo(username, password, dev)
+	result := struct {
+		Val string
+	}{res}
+	this.Data["json"] = &result
+	this.ServeJSON()
+}
