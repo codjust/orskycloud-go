@@ -6,7 +6,7 @@ import (
 	"github.com/bitly/go-simplejson" // for json get
 	"orskycloud-go/cache_module"
 	"orskycloud-go/utils"
-	"reflect"
+	//"reflect"
 	"strings"
 )
 
@@ -154,24 +154,27 @@ func CreateNewSensor(username string, password string, sensor Sensor) string {
 		temp, _ := sensorList.GetIndex(i).Get("name").String()
 		if sensor.Name == temp {
 			ret_msg = "exist"
+			red.Put(client)
 			return ret_msg
 		}
 		element["name"], _ = sensorList.GetIndex(i).Get("name").String()
 		element["unit"], _ = sensorList.GetIndex(i).Get("unit").String()
 		element["designation"], _ = sensorList.GetIndex(i).Get("designation").String()
 		element["createTime"], _ = sensorList.GetIndex(i).Get("createTime").String()
+		beego.Debug("elememt->:", element)
 		tb_sensor = append(tb_sensor, element)
+		beego.Debug("tb_sensor->:", tb_sensor)
 	}
 	element["name"] = sensor.Name
 	element["unit"] = sensor.Unit
 	element["designation"] = sensor.Designation
 	element["createTime"] = sensor.CreateTime
-
+	beego.Debug("sensor:1:", tb_sensor)
 	tb_sensor = append(tb_sensor, element) //add new sensor
 	dev_json.Set("Sensor", tb_sensor)
 
-	beego.Debug("Time:", sensor.CreateTime)
-	beego.Debug("Dev_json:", dev_json)
+	//beego.Debug("Time:", sensor.CreateTime)
+	beego.Debug("sensor2::", tb_sensor)
 
 	fin_data, err := dev_json.MarshalJSON()
 	ErrHandlr(err)
@@ -181,6 +184,6 @@ func CreateNewSensor(username string, password string, sensor Sensor) string {
 	} else {
 		ret_msg = "success"
 	}
-
+	red.Put(client)
 	return ret_msg
 }
