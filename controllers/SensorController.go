@@ -7,6 +7,7 @@ import (
 	"orskycloud-go/models"
 	"os"
 	"strconv"
+	"time"
 )
 
 type SensorController struct {
@@ -59,12 +60,13 @@ func (this *SensorController) NewSensor() {
 
 func (this *SensorController) CreateSensor() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	localtime := time.Now().Format("2006-01-02 15:04:05")
 	var new_sensor models.Sensor
 	new_sensor.Name = this.GetString("name")
 	new_sensor.Designation = this.GetString("designation")
 	new_sensor.Unit = this.GetString("unit")
 	new_sensor.Did = this.GetString("did")
-
+	new_sensor.CreateTime = localtime
 	res := models.CreateNewSensor(username, password, new_sensor)
 	result := struct {
 		Val string

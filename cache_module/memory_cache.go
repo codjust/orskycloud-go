@@ -13,7 +13,7 @@ var bm cache.Cache
 func init() {
 	var err error
 	//bm, err = cache.NewCache("redis", `{"key":"local","conn":"127.0.0.1:6039","dbNum":"0"}`) //{conn":"127.0.0.1:6039"}
-	bm, err = cache.NewCache("memory", `{"interval":60*30}`)
+	bm, err = cache.NewCache("memory", `{"interval":60}`)
 	if err != nil {
 		beego.Debug("create cache failed.")
 		os.Exit(1)

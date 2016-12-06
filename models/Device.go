@@ -95,7 +95,7 @@ func ReturnDeviceCacheData(username string, password string, pageNum int) (inter
 				copy(cacheDevice[i], temp)
 			}
 		}
-		cache_module.PutCache(key, cacheDevice, 1000*1000*1000)
+		cache_module.PutCache(key, cacheDevice, 1000*1000)
 	}
 
 	devices := cache_module.GetCache(key).([][]Device)

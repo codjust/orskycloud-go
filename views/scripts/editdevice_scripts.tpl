@@ -34,6 +34,4 @@ function SubmitEditDevice(Did){
 
 }
 
-
-
 </script>
