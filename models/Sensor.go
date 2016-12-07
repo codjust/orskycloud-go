@@ -261,3 +261,81 @@ func DeleteCurrentSensor(username string, password string, name string, Did stri
 	//ret_msg = "success"
 	return ret_msg
 }
+
+func ReturnSingalSensor(username string, password string, s_name string, s_did string) Sensor {
+	client, err := red.Get()
+	ErrHandlr(err)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+s_did).String()
+	dev_json, err := simplejson.NewJson([]byte(dev_info))
+	ErrHandlr(err)
+
+	sensorList := dev_json.Get("Sensor")
+	s_dev, _ := dev_json.Get("deviceName").String()
+	var s_info Sensor
+	str_len := Get_json_array_len(sensorList)
+	for i := 0; i < str_len; i++ {
+		temp, _ := sensorList.GetIndex(i).Get("name").String()
+		if s_name == temp {
+			s_info.Name, _ = sensorList.GetIndex(i).Get("name").String()
+			s_info.Unit, _ = sensorList.GetIndex(i).Get("unit").String()
+			s_info.Designation, _ = sensorList.GetIndex(i).Get("designation").String()
+			s_info.CreateTime, _ = sensorList.GetIndex(i).Get("createTime").String()
+			break
+		}
+	}
+	s_info.Device = s_dev
+	red.Put(client)
+	return s_info
+}
+
+func ModifySensorInfo(username string, password string, s_info Sensor) string {
+	client, err := red.Get()
+	ErrHandlr(err)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+s_info.Did).String()
+	dev_json, err := simplejson.NewJson([]byte(dev_info))
+	ErrHandlr(err)
+	sensorList := dev_json.Get("Sensor")
+
+	var tb_sensor []map[string]interface{}
+	var ret_msg string
+	for i := 0; i < Get_json_array_len(sensorList); i++ {
+		temp, _ := sensorList.GetIndex(i).Get("name").String()
+		if temp == "" {
+			continue
+		}
+		element := make(map[string]interface{})
+		if s_info.Name == temp {
+			element["name"] = s_info.Name
+			element["unit"] = s_info.Unit
+			element["designation"] = s_info.Designation
+			element["createTime"] = s_info.CreateTime
+		} else {
+			element["name"], _ = sensorList.GetIndex(i).Get("name").String()
+			element["unit"], _ = sensorList.GetIndex(i).Get("unit").String()
+			element["designation"], _ = sensorList.GetIndex(i).Get("designation").String()
+			element["createTime"], _ = sensorList.GetIndex(i).Get("createTime").String()
+		}
+		tb_sensor = append(tb_sensor, element)
+	}
+	dev_json.Set("Sensor", tb_sensor)
+
+	fin_data, err := dev_json.MarshalJSON()
+	ErrHandlr(err)
+	r := client.Cmd("hset", "uid:"+userkey, "did:"+s_info.Did, fin_data)
+	if r.Err != nil {
+		ret_msg = "failed"
+	} else {
+		ret_msg = "success"
+	}
+	red.Put(client)
+
+	//清除下缓存
+	cache_key := beego.AppConfig.String("cache.sensor.key")
+	cache_module.DeleteCache(cache_key)
+
+	return ret_msg
+}

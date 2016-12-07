@@ -28,7 +28,7 @@
 			<div class="btn-group">
 			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
 				<ul class="dropdown-menu">
-					<li><a href="#"><i class="icon-pencil"></i>编辑</a></li>
+					<li ><a href="/mysensor/edit?did={{.Did}}&&name={{.Name}}"><i class="icon-pencil"></i>编辑</a></li>
 					<li onclick="SubmitDeleteSensor({{.Did}},{{.Name}})"><a href="#"><i class="icon-trash"></i> 删除</a></li>
 					<li><a href="/mysensor/newdevice"><i class="icon-trash"></i> 新建</a></li>
 					<!-- <li><a href="#"><i class="icon-user"></i> Details</a></li> -->

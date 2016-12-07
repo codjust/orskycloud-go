@@ -52,5 +52,29 @@ function SubmitDeleteSensor(Did, Name)
 	}
 }
 
+// function LinkEditSensor(s_name,s_did)
+// {
+// 	alert(s_name + s_did)
+// 	$.ajax({
+// 			async: false,
+// 			type:"GET",
+// 			url:"/mydevice",
+// 			}).done(function(msg){
+// 			if(msg.Val == "success")
+// 			{
+// 				alert("添加成功！")
+// 				window.location.href = "/mysensor"
+// 			}
+// 			else if(msg.Val == "failed")
+// 			{
+// 				alert("添加失败，数据库操作错误，请重试！")
+// 			}
+// 			else if(msg.Val == "exist")
+// 			{
+// 				alert("该传感器已存在，请重新添加!")
+// 			}
+// 		});
+// }
+
 
 </script>

@@ -86,3 +86,40 @@ func (this *SensorController) DeleteSensor() {
 	this.Data["json"] = &result
 	this.ServeJSON()
 }
+
+func (this *SensorController) EditSensor() {
+	//data:{"name": Name,"designation": Designation, "did":Did, "unit": Unit}
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+
+	s_name := this.GetString("name")
+	did := this.GetString("did")
+
+	s_info := models.ReturnSingalSensor(username, password, s_name, did)
+	s_info.Did = did
+	beego.Debug("did:", did)
+
+	this.Data["Sensor"] = s_info
+	this.Layout = "layout/layout.tpl"
+	this.TplName = "editsensor.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Scripts"] = "scripts/editsensor_scripts.tpl"
+	this.Data["User"] = username
+}
+
+func (this *SensorController) EditModifySensor() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	var s_info models.Sensor
+
+	s_info.Name = this.GetString("name")
+	s_info.Designation = this.GetString("designation")
+	s_info.Unit = this.GetString("unit")
+	s_info.CreateTime = this.GetString("createTime")
+	s_info.Did = this.GetString("did")
+
+	res := models.ModifySensorInfo(username, password, s_info)
+	result := struct {
+		Val string
+	}{res}
+	this.Data["json"] = &result
+	this.ServeJSON()
+}

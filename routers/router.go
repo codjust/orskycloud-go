@@ -26,6 +26,8 @@ func init() {
 	beego.Router("/mysensor/newdevice", &controllers.SensorController{}, "GET:NewSensor")
 	beego.Router("/mysensor/new/create", &controllers.SensorController{}, "POST:CreateSensor")
 	beego.Router("/mysensor/delete", &controllers.SensorController{}, "POST:DeleteSensor")
+	beego.Router("/mysensor/edit", &controllers.SensorController{}, "GET:EditSensor")
+	beego.Router("/mysensor/edit/modify", &controllers.SensorController{}, "POST:EditModifySensor")
 
 	beego.Router("/myprofile", &controllers.ProfileController{}, "GET:MyProfile")
 	beego.Router("/myprofile/update", &controllers.ProfileController{}, "POST:Update")
