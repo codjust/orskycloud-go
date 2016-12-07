@@ -29,9 +29,6 @@
 
 function SubmitDeleteSensor(Did, Name)
 {
-	alert(Name)
-	alert(Did)
-
 	var isDelete = confirm("确定删除该传感器吗？");
 
 	if(isDelete == true)
@@ -45,20 +42,14 @@ function SubmitDeleteSensor(Did, Name)
 			if(msg.Val == "success")
 			{
 				alert("删除成功！")
-				//window.location.href = "/mysensor"
+				window.location.href = "/mysensor"
 			}
 			else if(msg.Val == "failed")
 			{
 				alert("添加失败，数据库操作错误，请重试！")
 			}
-			else if(msg.Val == "exist")
-			{
-				alert("该传感器已存在，请重新添加!")
-			}
 		});
 	}
-
-
 }
 
 
