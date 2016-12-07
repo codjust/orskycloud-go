@@ -6,7 +6,7 @@ import (
 	"github.com/bitly/go-simplejson" // for json get
 	"orskycloud-go/cache_module"
 	"orskycloud-go/utils"
-	//"reflect"
+	// "reflect"
 	"strings"
 )
 
@@ -46,7 +46,7 @@ func ReturnSensorInfo(username string, password string) ([]Sensor, int) {
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
 	devices_list := strings.Split(device_list_temp, "#")
 	for _, did := range devices_list {
-		beego.Debug("Device ID II:", did)
+		//beego.Debug("Device ID II:", did)
 		dev_info, _ := client.Cmd("hget", "uid:"+userkey, "did:"+did).Str()
 		dev_json, err := simplejson.NewJson([]byte(dev_info))
 		ErrHandlr(err)
@@ -57,8 +57,13 @@ func ReturnSensorInfo(username string, password string) ([]Sensor, int) {
 			beego.Debug("Len:", Get_json_array_len(sensor))
 			continue
 		}
-		beego.Debug("Device ID:", did)
+		//beego.Debug("Device ID:", did)
 		for i := 0; i < Get_json_array_len(sensor); i++ {
+			Name_Temp, _ := sensor.GetIndex(i).Get("name").String()
+			if Name_Temp == "" {
+				continue
+			}
+			temp_sensor.Did = did
 			temp_sensor.Device = dev_name
 			temp_sensor.Name, _ = sensor.GetIndex(i).Get("name").String()
 			temp_sensor.Designation, _ = sensor.GetIndex(i).Get("designation").String()
@@ -71,7 +76,7 @@ func ReturnSensorInfo(username string, password string) ([]Sensor, int) {
 	}
 
 	red.Put(client)
-	beego.Debug("SensorInfo:", SensorInfo)
+	//beego.Debug("SensorInfo:", SensorInfo)
 	return SensorInfo, count
 
 }
@@ -160,26 +165,29 @@ func CreateNewSensor(username string, password string, sensor Sensor) string {
 			red.Put(client)
 			return ret_msg
 		}
+		if temp == "" {
+			continue
+		}
 		element := make(map[string]interface{})
 		element["name"], _ = sensorList.GetIndex(i).Get("name").String()
 		element["unit"], _ = sensorList.GetIndex(i).Get("unit").String()
 		element["designation"], _ = sensorList.GetIndex(i).Get("designation").String()
 		element["createTime"], _ = sensorList.GetIndex(i).Get("createTime").String()
-		beego.Debug("elememt->:", element)
+		//	beego.Debug("elememt->:", element)
 		tb_sensor = append(tb_sensor, element)
-		beego.Debug("tb_sensor->:", tb_sensor)
+		//	beego.Debug("tb_sensor->:", tb_sensor)
 	}
 	element := make(map[string]interface{})
 	element["name"] = sensor.Name
 	element["unit"] = sensor.Unit
 	element["designation"] = sensor.Designation
 	element["createTime"] = sensor.CreateTime
-	beego.Debug("sensor:1:", tb_sensor)
+	//beego.Debug("sensor:1:", tb_sensor)
 	tb_sensor = append(tb_sensor, element) //add new sensor
 	dev_json.Set("Sensor", tb_sensor)
 
 	//beego.Debug("Time:", sensor.CreateTime)
-	beego.Debug("sensor2::", tb_sensor)
+	//beego.Debug("sensor2::", tb_sensor)
 
 	fin_data, err := dev_json.MarshalJSON()
 	ErrHandlr(err)
@@ -195,5 +203,61 @@ func CreateNewSensor(username string, password string, sensor Sensor) string {
 	cache_key := beego.AppConfig.String("cache.sensor.key")
 	cache_module.DeleteCache(cache_key)
 
+	return ret_msg
+}
+
+func DeleteCurrentSensor(username string, password string, name string, Did string) string {
+	beego.Debug("sensor name:", name, Did)
+	client, err := red.Get()
+	ErrHandlr(err)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
+	dev_json, err := simplejson.NewJson([]byte(dev_info))
+	ErrHandlr(err)
+
+	sensorList := dev_json.Get("Sensor")
+
+	var tb_sensor []map[string]interface{}
+	var ret_msg string
+	str_len := Get_json_array_len(sensorList)
+	for i := 0; i < str_len; i++ {
+		temp, _ := sensorList.GetIndex(i).Get("name").String()
+		if name != temp {
+			element := make(map[string]interface{})
+			element["name"], _ = sensorList.GetIndex(i).Get("name").String()
+			element["unit"], _ = sensorList.GetIndex(i).Get("unit").String()
+			element["designation"], _ = sensorList.GetIndex(i).Get("designation").String()
+			element["createTime"], _ = sensorList.GetIndex(i).Get("createTime").String()
+			tb_sensor = append(tb_sensor, element)
+		}
+		if str_len == 1 && name == temp {
+			break
+		}
+	}
+	beego.Debug("tb_sensor:", tb_sensor)
+	if str_len == 1 {
+		element := make(map[string]interface{})
+		tb_sensor = append(tb_sensor, element)
+		dev_json.Set("Sensor", tb_sensor)
+	} else {
+		dev_json.Set("Sensor", tb_sensor)
+	}
+
+	beego.Debug("dev_json:", dev_json)
+	fin_data, err := dev_json.MarshalJSON()
+	ErrHandlr(err)
+	r := client.Cmd("hset", "uid:"+userkey, "did:"+Did, fin_data)
+	if r.Err != nil {
+		ret_msg = "failed"
+	} else {
+		ret_msg = "success"
+	}
+	red.Put(client)
+
+	//清除下缓存
+	cache_key := beego.AppConfig.String("cache.sensor.key")
+	cache_module.DeleteCache(cache_key)
+	//ret_msg = "success"
 	return ret_msg
 }

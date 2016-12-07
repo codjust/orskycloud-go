@@ -74,3 +74,15 @@ func (this *SensorController) CreateSensor() {
 	this.Data["json"] = &result
 	this.ServeJSON()
 }
+
+func (this *SensorController) DeleteSensor() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	sensorName := this.GetString("name")
+	Did := this.GetString("did")
+	res := models.DeleteCurrentSensor(username, password, sensorName, Did)
+	result := struct {
+		Val string
+	}{res}
+	this.Data["json"] = &result
+	this.ServeJSON()
+}

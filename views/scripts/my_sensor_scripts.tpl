@@ -26,21 +26,40 @@
     });
   });
 
- // $.jqPaginator('#pagination0', {
- //        totalPages:  '{{.Page.TotalPage}}',
- //        visiblePages: 5,
- //        currentPage: '{{.Page.PageNo}}',
- //        prev: '<li class="prev"><a href="javascript:;">上一页</a></li>',
- //        next: '<li class="next"><a href="javascript:;">下一页</a></li>',
- //        page: '<li class="page"><a href="javascript:;">{{.Page.PageNo}}</a></li>',
- //        onPageChange: function (page, type) {
- //            // alert(type + '：' + page);
- //            // if(if_firstime){
- //            //     if_firstime = false;
- //            // }else if(!if_firstime){
- //            //     changePage(page);
- //            // }
- //            window.location.href = "/mydevice/" + page
- //        }
- //    });
+
+function SubmitDeleteSensor(Did, Name)
+{
+	alert(Name)
+	alert(Did)
+
+	var isDelete = confirm("确定删除该传感器吗？");
+
+	if(isDelete == true)
+	{
+		$.ajax({
+			async: false,
+			type:"POST",
+			url:"/mysensor/delete",
+			data:{"name": Name, "did":Did}
+			}).done(function(msg){
+			if(msg.Val == "success")
+			{
+				alert("删除成功！")
+				//window.location.href = "/mysensor"
+			}
+			else if(msg.Val == "failed")
+			{
+				alert("添加失败，数据库操作错误，请重试！")
+			}
+			else if(msg.Val == "exist")
+			{
+				alert("该传感器已存在，请重新添加!")
+			}
+		});
+	}
+
+
+}
+
+
 </script>
