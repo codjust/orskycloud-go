@@ -46,15 +46,18 @@ func ReturnSensorInfo(username string, password string) ([]Sensor, int) {
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
 	devices_list := strings.Split(device_list_temp, "#")
 	for _, did := range devices_list {
+		beego.Debug("Device ID II:", did)
 		dev_info, _ := client.Cmd("hget", "uid:"+userkey, "did:"+did).Str()
 		dev_json, err := simplejson.NewJson([]byte(dev_info))
 		ErrHandlr(err)
 		dev_name, _ := dev_json.Get("deviceName").String()
 		sensor := dev_json.Get("Sensor")
 		//	beego.Debug("len:", Get_json_array_len(sensor))
-		if Get_json_array_len(sensor) == 1 {
+		if Get_json_array_len(sensor) == 0 {
+			beego.Debug("Len:", Get_json_array_len(sensor))
 			continue
 		}
+		beego.Debug("Device ID:", did)
 		for i := 0; i < Get_json_array_len(sensor); i++ {
 			temp_sensor.Device = dev_name
 			temp_sensor.Name, _ = sensor.GetIndex(i).Get("name").String()
@@ -68,7 +71,7 @@ func ReturnSensorInfo(username string, password string) ([]Sensor, int) {
 	}
 
 	red.Put(client)
-	//	beego.Debug("data:", SensorInfo)
+	beego.Debug("SensorInfo:", SensorInfo)
 	return SensorInfo, count
 
 }
@@ -79,6 +82,7 @@ func ReturnSensorCacheData(username string, password string, pageNum int) (inter
 	var tp int //total page
 	var ret_count int
 	if cache_module.IsExistCache(key) == false {
+		beego.Debug("sensor cache not exist.")
 		dev_list, count := ReturnSensorInfo(username, password)
 		ret_count = count
 		tp = count / pageSize
@@ -148,7 +152,6 @@ func CreateNewSensor(username string, password string, sensor Sensor) string {
 	sensorList := dev_json.Get("Sensor")
 
 	var tb_sensor []map[string]interface{}
-	element := make(map[string]interface{})
 	var ret_msg string
 	for i := 0; i < Get_json_array_len(sensorList); i++ {
 		temp, _ := sensorList.GetIndex(i).Get("name").String()
@@ -157,6 +160,7 @@ func CreateNewSensor(username string, password string, sensor Sensor) string {
 			red.Put(client)
 			return ret_msg
 		}
+		element := make(map[string]interface{})
 		element["name"], _ = sensorList.GetIndex(i).Get("name").String()
 		element["unit"], _ = sensorList.GetIndex(i).Get("unit").String()
 		element["designation"], _ = sensorList.GetIndex(i).Get("designation").String()
@@ -165,6 +169,7 @@ func CreateNewSensor(username string, password string, sensor Sensor) string {
 		tb_sensor = append(tb_sensor, element)
 		beego.Debug("tb_sensor->:", tb_sensor)
 	}
+	element := make(map[string]interface{})
 	element["name"] = sensor.Name
 	element["unit"] = sensor.Unit
 	element["designation"] = sensor.Designation
@@ -185,5 +190,10 @@ func CreateNewSensor(username string, password string, sensor Sensor) string {
 		ret_msg = "success"
 	}
 	red.Put(client)
+
+	//清除下缓存
+	cache_key := beego.AppConfig.String("cache.sensor.key")
+	cache_module.DeleteCache(cache_key)
+
 	return ret_msg
 }
