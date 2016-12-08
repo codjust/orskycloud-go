@@ -2,8 +2,6 @@
 
 function SubmitEditSensor(s_did)
 {
-	alert(s_did)
-
 	var s_name = document.getElementById("name").value;
 	var s_desc = document.getElementById("designation").value;
 	var s_unit = document.getElementById("unit").value;
