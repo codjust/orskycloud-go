@@ -4,7 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	//"orskycloud-go/cache_module"
 	//"orskycloud-go/logicfunc"
-	"orskycloud-go/models"
+	//	"orskycloud-go/models"
 	//	"os"
 	//"strconv"
 	//"time"
