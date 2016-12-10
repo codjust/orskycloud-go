@@ -20,6 +20,6 @@ func (this *HistoryController) HistoryPage() {
 	this.Data["Active_History"] = "active"
 	this.Layout = "layout/layout.tpl"
 	this.LayoutSections = make(map[string]string)
-	//this.LayoutSections["Scripts"] = "scripts/my_sensor_scripts.tpl"
+	this.LayoutSections["Scripts"] = "scripts/history_scripts.tpl"
 	//this.Data["User"] = username
 }

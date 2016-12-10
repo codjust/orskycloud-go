@@ -1,0 +1,145 @@
+<script type="text/javascript">
+
+function SelectTime()
+{
+
+	var CurrentSelected = document.getElementById("select").value
+	var myDate = new Date();
+	myDate.getYear(); //获取当前年份(2位)
+	Year = myDate.getFullYear();
+	Month = myDate.getMonth() + 1; //获取当前月份(0-11,0代表1月)
+	Day = myDate.getDate(); //获取当前日(1-31)
+
+	Hour = myDate.getHours(); //获取当前小时数(0-23)
+	Minute = myDate.getMinutes(); //获取当前分钟数(0-59)
+	Second = myDate.getSeconds(); //获取当前秒数(0-59)
+
+   /**
+* 获取本周、本季度、本月、上月的开端日期、停止日期
+*/
+var now = new Date(); //当前日期
+var nowDayOfWeek = now.getDay(); //今天本周的第几天
+var nowDay = now.getDate(); //当前日
+var nowMonth = now.getMonth() + 1; //当前月
+var nowYear = now.getYear(); //当前年
+nowYear += (nowYear < 2000) ? 1900 : 0; //
+
+var lastMonthDate = new Date(); //上月日期
+lastMonthDate.setDate(1);
+lastMonthDate.setMonth(lastMonthDate.getMonth()-1);
+var lastYear = lastMonthDate.getYear();
+var lastMonth = lastMonthDate.getMonth() + 1;
+
+//格局化日期：yyyy-MM-dd
+function formatDate(date) {
+var myyear = date.getFullYear();
+var mymonth = date.getMonth()+1;
+var myweekday = date.getDate();
+if(mymonth < 10){
+mymonth = "0" + mymonth;
+}
+if(myweekday < 10){
+myweekday = "0" + myweekday;
+}
+return (myyear+"-"+mymonth + "-" + myweekday);
+}
+
+//获得某月的天数
+function getMonthDays(myMonth){
+var monthStartDate = new Date(nowYear, myMonth, 1);
+var monthEndDate = new Date(nowYear, myMonth + 1, 1);
+var days = (monthEndDate - monthStartDate)/(1000 * 60 * 60 * 24);
+return days;
+}
+
+
+
+//获得本周的开端日期
+function getWeekStartDate() {
+var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
+return formatDate(weekStartDate);
+}
+
+//获得本周的停止日期
+function getWeekEndDate() {
+var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek));
+return formatDate(weekEndDate);
+}
+
+//获得本月的开端日期
+function getMonthStartDate(){
+var monthStartDate = new Date(nowYear, nowMonth, 1);
+return formatDate(monthStartDate);
+}
+
+//获得本月的停止日期
+function getMonthEndDate(){
+var monthEndDate = new Date(nowYear, nowMonth, getMonthDays(nowMonth));
+return formatDate(monthEndDate);
+}
+
+//获得上月开端时候
+function getLastMonthStartDate(){
+var lastMonthStartDate = new Date(nowYear, lastMonth, 1);
+return formatDate(lastMonthStartDate);
+}
+
+//获得上月停止时候
+function getLastMonthEndDate(){
+var lastMonthEndDate = new Date(nowYear, lastMonth, getMonthDays(lastMonth));
+return formatDate(lastMonthEndDate);
+}
+
+
+   var StartTime = "";
+   var EndTime = "";
+   switch(CurrentSelected)
+   {
+   	case "day":
+   		//alert("Test")
+   		EndTime		= Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
+   	//	alert(EndTime)
+   		Day = Day - 1;
+   		StartTime   = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
+   	//	alert(StartTime)
+   		document.getElementById("starttime").value = StartTime
+   		document.getElementById("endtime").value = EndTime
+   		//alert(StartTime)
+   	case "week":
+   		StartTime = getWeekStartDate() + " " + Hour + ":" + Minute + ":" + Second;
+   		EndTime   = getWeekEndDate() + " " + Hour + ":" + Minute + ":" + Second;
+   		document.getElementById("starttime").value = StartTime
+   		document.getElementById("endtime").value = EndTime
+   	case "month":
+   		StartTime = getMonthStartDate() + " " + Hour + ":" + Minute + ":" + Second;
+   		EndTime   = getMonthEndDate() + " " + Hour + ":" + Minute + ":" + Second;
+   		document.getElementById("starttime").value = StartTime
+   		document.getElementById("endtime").value = EndTime
+   	case "year":
+   		EndTime = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
+   		Year = Year - 1;
+   		StartTime   = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
+   		document.getElementById("starttime").value = StartTime
+   		document.getElementById("endtime").value = EndTime
+   	case "self":
+   		document.getElementById("starttime").value = ""
+   		document.getElementById("endtime").value = ""
+   	default:
+   		document.getElementById("starttime").value = StartTime
+   		document.getElementById("endtime").value = EndTime
+   }
+
+  // 	document.getElementById("starttime").value = "StartTime"
+
+   // if(CurrentSelected != "self"){
+   // 		document.getElementById("starttime").value = StartTime
+   // 		document.getElementById("endtime").value = EndTime
+   // }
+
+   // Month = Month + 1;
+   // alert(nowMonth)
+
+}
+
+
+</script>

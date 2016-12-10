@@ -11,10 +11,16 @@
 <!-- 	</tr>
 	<tr> -->
 		<td>&nbsp;&nbsp;&nbsp;</td>
-		<td><select id="did" style="width:100px"><option value=>自定义时间</option></select></td>
-		<td><input type="text" class="input-xlarge" id="phone" value='{{.Profile.Phone}}' style="width:110px"/></td>
+		<td><select id="select" style="width:100px" onclick="SelectTime()">
+		<option value="self">自定义时间</option>
+		<option value="day">最近一天</option>
+		<option value="week">最近一周</option>
+		<option value="month">最近一月</option>
+		<option value="year">最近一年</option>
+		</select></td>
+		<td><input type="text" class="input-xlarge" id="starttime" style="width:130px"/></td>
 		<td><p>-</p></td>
-		<td><input type="text" class="input-xlarge" id="phone" value='{{.Profile.Phone}}' style="width:110px"/></td>
+		<td><input type="text" class="input-xlarge" id="endtime"  style="width:130px"/></td>
 		<td>&nbsp;&nbsp;&nbsp;</td>
 		<div>
 		<td><input type="button" value="查询" class="btn btn-success btn-large" /></td>
@@ -23,60 +29,6 @@
 		</div>
 	</tr>
 	</div>
-<!-- 	<tr>
-		<td>传感器</td>
-		<td>
-			<div class="control-group">
-				<div class="controls">
-					<select id="did">
-						<option value= '{{.Did}}'>Test</option>
-					</select>
-				</div>
-			</div>
-		</td>
-		<td>
-		<div class="control-group">
-					 <div class="controls">
-						<select id="did">
-							<option value= '{{.Did}}'>Test</option>
-						</select>
-				</div>
-		</div>
-
-		</td>
-	</tr>
-	<tr>
-		<td>自定义时间</td>
-		<td>
-			<div class="control-group">
-				<div class="controls">
-					<select id="did">
-						<option value= '{{.Did}}'>Time</option>
-					</select>
-				</div>
-			</div>
-		</td>
-		<td>
-			<div class="control-group">
-					<div class="controls">
-						<select id="did">
-							<option value= '{{.Did}}'>Time</option>
-						</select>
-					</div>
-				</div>
-
-		</td>
-	</tr>
-		<td>
-			<div >
-					<input type="button" class="btn btn-success btn-large" value="查询" />
-			</div>
-		</td>
-		<td>
-		<div >
-					<input type="button" class="btn btn-success btn-large" value="删除" />
-		</div>
-		</td> -->
   </table>
 <table class="table table-striped table-bordered table-condensed">
 	<tr class="list-users">
