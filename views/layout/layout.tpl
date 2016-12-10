@@ -71,7 +71,7 @@
                         <li class='{{.Active_Dev}}'><a href="/mydevice">我的设备</a></li>
                         <li class='{{.Active_Sensor}}'><a href="/mysensor">传感器</a></li>
                         <li class="nav-header"><i class="icon-signal"></i>数据统计</li>
-                        <li class='{{.Active}}'><a href="/history">历史数据</a></li>
+                        <li class='{{.Active_History}}'><a href="/history">历史数据</a></li>
                         <li class='{{.Active}}'><a href="user-stats.html">历史走势</a></li>
                         <li class='{{.Active}}'><a href="visitor-stats.html">数据对比</a></li>
                         <li class="nav-header"><i class="icon-user"></i> 资料</li>

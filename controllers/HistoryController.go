@@ -17,4 +17,9 @@ type HistoryController struct {
 func (this *HistoryController) HistoryPage() {
 
 	this.TplName = "historydata.tpl"
+	this.Data["Active_History"] = "active"
+	this.Layout = "layout/layout.tpl"
+	this.LayoutSections = make(map[string]string)
+	//this.LayoutSections["Scripts"] = "scripts/my_sensor_scripts.tpl"
+	//this.Data["User"] = username
 }
