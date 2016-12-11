@@ -2,7 +2,6 @@
 
 function SelectTime()
 {
-
 	var CurrentSelected = document.getElementById("select").value
 	var myDate = new Date();
 	myDate.getYear(); //获取当前年份(2位)
@@ -14,13 +13,13 @@ function SelectTime()
 	Minute = myDate.getMinutes(); //获取当前分钟数(0-59)
 	Second = myDate.getSeconds(); //获取当前秒数(0-59)
 
-   /**
+ /**
 * 获取本周、本季度、本月、上月的开端日期、停止日期
 */
 var now = new Date(); //当前日期
 var nowDayOfWeek = now.getDay(); //今天本周的第几天
 var nowDay = now.getDate(); //当前日
-var nowMonth = now.getMonth() + 1; //当前月
+var nowMonth = now.getMonth(); //当前月
 var nowYear = now.getYear(); //当前年
 nowYear += (nowYear < 2000) ? 1900 : 0; //
 
@@ -28,7 +27,7 @@ var lastMonthDate = new Date(); //上月日期
 lastMonthDate.setDate(1);
 lastMonthDate.setMonth(lastMonthDate.getMonth()-1);
 var lastYear = lastMonthDate.getYear();
-var lastMonth = lastMonthDate.getMonth() + 1;
+var lastMonth = lastMonthDate.getMonth();
 
 //格局化日期：yyyy-MM-dd
 function formatDate(date) {
@@ -96,50 +95,40 @@ return formatDate(lastMonthEndDate);
    switch(CurrentSelected)
    {
    	case "day":
-   		//alert("Test")
    		EndTime		= Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
-   	//	alert(EndTime)
    		Day = Day - 1;
    		StartTime   = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
-   	//	alert(StartTime)
-   		document.getElementById("starttime").value = StartTime
-   		document.getElementById("endtime").value = EndTime
-   		//alert(StartTime)
+   		document.getElementById("start").value = StartTime
+   		document.getElementById("end").value = EndTime
+   		break;
    	case "week":
    		StartTime = getWeekStartDate() + " " + Hour + ":" + Minute + ":" + Second;
    		EndTime   = getWeekEndDate() + " " + Hour + ":" + Minute + ":" + Second;
-   		document.getElementById("starttime").value = StartTime
-   		document.getElementById("endtime").value = EndTime
+   		document.getElementById("start").value = StartTime
+   		document.getElementById("end").value = EndTime
+   		break;
    	case "month":
    		StartTime = getMonthStartDate() + " " + Hour + ":" + Minute + ":" + Second;
    		EndTime   = getMonthEndDate() + " " + Hour + ":" + Minute + ":" + Second;
-   		document.getElementById("starttime").value = StartTime
-   		document.getElementById("endtime").value = EndTime
+   		document.getElementById("start").value = StartTime
+   		document.getElementById("end").value = EndTime
+   		break;
    	case "year":
    		EndTime = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
    		Year = Year - 1;
    		StartTime   = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
-   		document.getElementById("starttime").value = StartTime
-   		document.getElementById("endtime").value = EndTime
+   		document.getElementById("start").value = StartTime
+   		document.getElementById("end").value = EndTime
+   		break;
    	case "self":
-   		document.getElementById("starttime").value = ""
-   		document.getElementById("endtime").value = ""
+   		document.getElementById("start").value = ""
+   		document.getElementById("end").value = ""
+   		break;
    	default:
-   		document.getElementById("starttime").value = StartTime
-   		document.getElementById("endtime").value = EndTime
+   		document.getElementById("start").value = StartTime
+   		document.getElementById("end").value = EndTime
+   		break;
    }
-
-  // 	document.getElementById("starttime").value = "StartTime"
-
-   // if(CurrentSelected != "self"){
-   // 		document.getElementById("starttime").value = StartTime
-   // 		document.getElementById("endtime").value = EndTime
-   // }
-
-   // Month = Month + 1;
-   // alert(nowMonth)
-
 }
-
 
 </script>

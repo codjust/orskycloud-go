@@ -6,8 +6,14 @@
 	<div>
 	<tr>
 		<th><p style = "font-size: 15px">传感器：</p></th>
-		<td><select id="did" style="width:120px"><option value=>Test</option></select></td>
-		<td><select id="did" style="width:120px"><option value=>Test</option></select></td>
+		<td><select id="did" style="width:120px">
+		{{range .Data}}
+		<option value={{.Did}}>{{.Dev_Name}}</option>
+		{{end}}
+		</select></td>
+		<td><select id="s_name" style="width:120px">
+		<option value=>{{.S_Array.Name}}</option>
+		</select></td>
 <!-- 	</tr>
 	<tr> -->
 		<td>&nbsp;&nbsp;&nbsp;</td>
@@ -18,9 +24,9 @@
 		<option value="month">最近一月</option>
 		<option value="year">最近一年</option>
 		</select></td>
-		<td><input type="text" class="input-xlarge" id="starttime" style="width:130px"/></td>
+		<td><input type="text" class="input-xlarge" id="start" style="width:130px"/></td>
 		<td><p>-</p></td>
-		<td><input type="text" class="input-xlarge" id="endtime"  style="width:130px"/></td>
+		<td><input type="text" class="input-xlarge" id="end"  style="width:130px"/></td>
 		<td>&nbsp;&nbsp;&nbsp;</td>
 		<div>
 		<td><input type="button" value="查询" class="btn btn-success btn-large" /></td>
@@ -36,7 +42,6 @@
 		<th>名称</th>
 		<th>更新时间</th>
 		<th>值</th>
-		<!-- <td><span class="label label-success">Active</span></td> -->
 	</tr>
 	<tr>
 		<td>1</td>

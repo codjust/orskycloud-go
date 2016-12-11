@@ -46,18 +46,15 @@ func ReturnSensorInfo(username string, password string) ([]Sensor, int) {
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
 	devices_list := strings.Split(device_list_temp, "#")
 	for _, did := range devices_list {
-		//beego.Debug("Device ID II:", did)
 		dev_info, _ := client.Cmd("hget", "uid:"+userkey, "did:"+did).Str()
 		dev_json, err := simplejson.NewJson([]byte(dev_info))
 		ErrHandlr(err)
 		dev_name, _ := dev_json.Get("deviceName").String()
 		sensor := dev_json.Get("Sensor")
-		//	beego.Debug("len:", Get_json_array_len(sensor))
 		if Get_json_array_len(sensor) == 0 {
 			beego.Debug("Len:", Get_json_array_len(sensor))
 			continue
 		}
-		//beego.Debug("Device ID:", did)
 		for i := 0; i < Get_json_array_len(sensor); i++ {
 			Name_Temp, _ := sensor.GetIndex(i).Get("name").String()
 			if Name_Temp == "" {
