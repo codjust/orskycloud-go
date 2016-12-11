@@ -50,4 +50,7 @@
 		<td>4</td>
 	</tr>
 </table>
+<div class="pagination">
+	<ul class="pagination" id="pagination1"></ul>
+</div>
 </div>

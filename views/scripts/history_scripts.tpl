@@ -170,11 +170,7 @@ function SearchHistory(){
 		alert("请选择要查询的传感器！")
 		return
 	}
-
 	//2015-12-11 19:27:57
-	//var patt = new RegExp("\d{4}-\d{2}-\d{2}\s?\d{2}:\d{2}:\d{2}")
-	//var ret  = patt.test("2015-12-11 19:27:57")
-	//alert(ret)
 	var pattern = /\d{4}-\d{2}-\d{2}\s?\d{2}:\d{2}:(\d+)/
 	var r1 = pattern.test(start)
 	var r2 = pattern.test(end)
@@ -183,6 +179,40 @@ function SearchHistory(){
 		alert("时间格式错误，请设置：2015-12-1 12:12:12")
 		return;
 	}
+
+	$.ajax({
+			async: false,
+            url: "/history/data",    //后台webservice里的方法名称
+            type: "post",
+            data:{"did": Did, "name": h_name, "start":start, "end":end},
+            traditional: true,
+            success: function (data) {
+            	var optionstring = "";
+                for (var i in data) {
+                    var jsonObj =data[i];
+                        optionstring += "<option value=\"" + jsonObj.Name + "\" >" + jsonObj.Name + "</option>";
+                        $("#s_name").html("<option value='请选择'>请选择...</option> "+optionstring);
+                    }
+                },
+                error: function (msg) {
+                    alert("出错了！");
+                }
+            });
+
 }
+
+var Page = 2;
+
+$(function () {
+    $("#pagination1").bootstrapPaginator({
+      currentPage: Page,
+      totalPages: Page,
+      bootstrapMajorVersion: 3,
+      size: "small",
+      onPageClicked: function(e,originalEvent,type,page){
+        window.location.href = "/mysensor/" + page
+      }
+    });
+  });
 
 </script>

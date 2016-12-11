@@ -37,3 +37,14 @@ func (this *HistoryController) GetSensorList() {
 	this.Data["json"] = &ret_data
 	this.ServeJSON()
 }
+
+func (this *HistoryController) GetHistoryData() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	Did := this.GetString("did")
+	Name := this.GetString("name")
+	Start := this.GetString("start")
+	End := this.GetString("end")
+
+	models.GetHistory(username, password, Did, Name, Start, End)
+
+}

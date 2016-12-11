@@ -5,7 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/bitly/go-simplejson" // for json get
 	// "orskycloud-go/cache_module"
-	// "orskycloud-go/comm"
+	"orskycloud-go/comm"
 	// "orskycloud-go/utils"
 	"strings"
 	// "time"
@@ -15,6 +15,13 @@ type DevSenList struct {
 	Did      string
 	Dev_Name string
 	S_Array  []Sensor
+}
+
+type HistoryData struct {
+	Name        string //传感器标识
+	Designation string //描述或者别名
+	Timestamp   string //上传时间
+	Value       string //值
 }
 
 func GetDevSenList(username string, password string) []DevSenList {
@@ -87,4 +94,50 @@ func GetSenSor(username string, password string, Did string) []S_List {
 	red.Put(client)
 
 	return s_list
+}
+
+func ReturnSelectHistory(username, password, Did, Name, Start, End string) {
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
+	dev_json, err := simplejson.NewJson([]byte(dev_info))
+	ErrHandlr(err)
+	var Data []HistoryData
+	var tmp_data HistoryData
+	data_json := dev_json.Get("data")
+	for i := 0; i < Get_json_array_len(data_json); i++ {
+		tmp, _ := data_json.GetIndex(i).Get("name")
+		if tmp == Name {
+			timestamp, _ := data_json.GetIndex(i).Get("timestamp")
+			if comm.CompareTime(Start, timestamp) == true && comm.CompareTime(timestamp, End) == true {
+				value, _ := data_json.GetIndex(i).Get("value")
+				tmp_data.Name = tmp
+				tmp_data.timestamp = timestamp
+
+			}
+		}
+	}
+}
+
+func GetHistory(username, password, Did, Name, Start, End string) {
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
+	dev_json, err := simplejson.NewJson([]byte(dev_info))
+	ErrHandlr(err)
+	data_json := dev_json.Get("data")
+	// {
+	//            "sensor": "weight",
+	//            "timestamp": "2016-10-20 14:50:30",
+	//            "value": 78
+	//    }
+
 }
