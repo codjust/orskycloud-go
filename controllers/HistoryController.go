@@ -27,3 +27,13 @@ func (this *HistoryController) HistoryPage() {
 	this.LayoutSections["Scripts"] = "scripts/history_scripts.tpl"
 	this.Data["User"] = username
 }
+
+func (this *HistoryController) GetSensorList() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	Did := this.GetString("did")
+	beego.Debug("did:", Did)
+	ret_data := models.GetSenSor(username, password, Did)
+	beego.Debug("ret_data", ret_data)
+	this.Data["json"] = &ret_data
+	this.ServeJSON()
+}

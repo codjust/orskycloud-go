@@ -37,5 +37,6 @@ func init() {
 	beego.Router("/test", &controllers.HomePageController{}, "GET:MyCache")
 
 	beego.Router("/history", &controllers.HistoryController{}, "GET:HistoryPage")
+	beego.Router("/history/list", &controllers.HistoryController{}, "POST:GetSensorList")
 
 }

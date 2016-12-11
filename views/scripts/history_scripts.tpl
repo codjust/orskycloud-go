@@ -131,4 +131,32 @@ return formatDate(lastMonthEndDate);
    }
 }
 
+
+function AddSensorItem()
+{
+	var Did = document.getElementById("did").value;
+	//alert(Did)
+	$.ajax({
+			async: false,
+            url: "/history/list",    //后台webservice里的方法名称
+            type: "post",
+            data:{"did": Did},
+            traditional: true,
+            success: function (data) {
+            	 var optionstring = "";
+                for (var i in data) {
+                    var jsonObj =data[i];
+                        optionstring += "<option value=\"" + jsonObj.Name + "\" >" + jsonObj.Name + "</option>";
+                        $("#s_name").html("<option value='请选择'>请选择...</option> "+optionstring);
+                    }
+                },
+                error: function (msg) {
+                    alert("出错了！");
+                }
+            });
+}
+
+
+document.onload = AddSensorItem()
+
 </script>

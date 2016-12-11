@@ -6,13 +6,13 @@
 	<div>
 	<tr>
 		<th><p style = "font-size: 15px">传感器：</p></th>
-		<td><select id="did" style="width:120px">
+		<td><select id="did" style="width:120px" onchange="AddSensorItem()">
 		{{range .Data}}
-		<option value={{.Did}}>{{.Dev_Name}}</option>
+		<option value='{{.Did}}'>{{.Dev_Name}}</option>
 		{{end}}
 		</select></td>
 		<td><select id="s_name" style="width:120px">
-		<option value=>{{.S_Array.Name}}</option>
+		<option value=></option>
 		</select></td>
 <!-- 	</tr>
 	<tr> -->

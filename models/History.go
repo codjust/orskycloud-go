@@ -56,3 +56,35 @@ func GetDevSenList(username string, password string) []DevSenList {
 
 	return ret_array
 }
+
+type S_List struct {
+	Name string
+}
+
+func GetSenSor(username string, password string, Did string) []S_List {
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
+	dev_json, err := simplejson.NewJson([]byte(dev_info))
+	ErrHandlr(err)
+	s_json := dev_json.Get("Sensor")
+	var s_list []S_List
+	if Get_json_array_len(s_json) == 0 {
+		beego.Debug("Len:", Get_json_array_len(s_json))
+		return s_list
+	}
+	var s_tmp S_List
+	for i := 0; i < Get_json_array_len(s_json); i++ {
+		s_tmp.Name, _ = s_json.GetIndex(i).Get("name").String()
+		beego.Debug("Name:", s_tmp)
+		s_list = append(s_list, s_tmp)
+	}
+
+	red.Put(client)
+
+	return s_list
+}
