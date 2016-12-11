@@ -29,7 +29,7 @@
 		<td><input type="text" class="input-xlarge" id="end"  style="width:130px"/></td>
 		<td>&nbsp;&nbsp;&nbsp;</td>
 		<div>
-		<td><input type="button" value="查询" class="btn btn-success btn-large" /></td>
+		<td><input type="button" value="查询" class="btn btn-success btn-large" onclick="SearchHistory()" /></td>
 		<td>&nbsp;&nbsp;</td>
 		<td><input type="button" value="删除" class="btn btn-success btn-large" /></td>
 		</div>
@@ -48,16 +48,6 @@
 		<td>2</td>
 		<td>3</td>
 		<td>4</td>
-		<td>
-			<div class="btn-group">
-			<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
-				<ul class="dropdown-menu">
-					<li ><a href="/mysensor/edit?did={{.Did}}&&name={{.Name}}"><i class="icon-pencil"></i>编辑</a></li>
-					<li onclick="SubmitDeleteSensor({{.Did}},{{.Name}})"><a href="#"><i class="icon-trash"></i> 删除</a></li>
-					<li><a href="/mysensor/newdevice"><i class="icon-trash"></i> 新建</a></li>
-				</ul>
-			</div>
-		</td>
 	</tr>
 </table>
 </div>

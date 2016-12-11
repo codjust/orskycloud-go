@@ -96,7 +96,7 @@ return formatDate(lastMonthEndDate);
    {
    	case "day":
    		EndTime		= Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
-   		Day = Day - 1;
+   		Day = Day - 1 ;
    		StartTime   = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
    		document.getElementById("start").value = StartTime
    		document.getElementById("end").value = EndTime
@@ -157,6 +157,32 @@ function AddSensorItem()
 }
 
 
-document.onload = AddSensorItem()
+document.onload = AddSensorItem()  //页面加载完自动执行此方法
+
+function SearchHistory(){
+	var h_did  = document.getElementById("did").value
+	var h_name = document.getElementById("s_name").value
+	var start  = document.getElementById("start").value
+	var end    = document.getElementById("end").value
+
+	//alert(h_name)
+	if(h_name == "请选择"){
+		alert("请选择要查询的传感器！")
+		return
+	}
+
+	//2015-12-11 19:27:57
+	//var patt = new RegExp("\d{4}-\d{2}-\d{2}\s?\d{2}:\d{2}:\d{2}")
+	//var ret  = patt.test("2015-12-11 19:27:57")
+	//alert(ret)
+	var pattern = /\d{4}-\d{2}-\d{2}\s?\d{2}:\d{2}:(\d+)/
+	var r1 = pattern.test(start)
+	var r2 = pattern.test(end)
+	if(r1 == false || r2 == false)
+	{
+		alert("时间格式错误，请设置：2015-12-1 12:12:12")
+		return;
+	}
+}
 
 </script>
