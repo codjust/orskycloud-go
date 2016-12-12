@@ -146,7 +146,7 @@ function AddSensorItem()
             	 var optionstring = "";
                 for (var i in data) {
                     var jsonObj =data[i];
-                        optionstring += "<option value=\"" + jsonObj.Name + "\" >" + jsonObj.Name + "</option>";
+                        optionstring += "<option value=\"" + jsonObj.Name + "\" >" + jsonObj.Designation + "</option>";
                         $("#s_name").html("<option value='请选择'>请选择...</option> "+optionstring);
                     }
                 },
@@ -159,7 +159,11 @@ function AddSensorItem()
 
 document.onload = AddSensorItem()  //页面加载完自动执行此方法
 
-function SearchHistory(){
+//声明两个全局变量
+var TotalPage
+var CurrentPage
+function SearchHistory(Page){
+	Page = 1
 	var h_did  = document.getElementById("did").value
 	var h_name = document.getElementById("s_name").value
 	var start  = document.getElementById("start").value
@@ -180,19 +184,29 @@ function SearchHistory(){
 		return;
 	}
 
+// <tr>
+// 		<td>1</td>
+// 		<td>2</td>
+// 		<td>3</td>
+// 		<td>4</td>
+// 	</tr>
+alert("test")
 	$.ajax({
 			async: false,
             url: "/history/data",    //后台webservice里的方法名称
             type: "post",
-            data:{"did": Did, "name": h_name, "start":start, "end":end},
+            data:{"did": Did, "name": h_name, "start":start, "end":end, "page":Page},
             traditional: true,
             success: function (data) {
-            	var optionstring = "";
-                for (var i in data) {
-                    var jsonObj =data[i];
-                        optionstring += "<option value=\"" + jsonObj.Name + "\" >" + jsonObj.Name + "</option>";
-                        $("#s_name").html("<option value='请选择'>请选择...</option> "+optionstring);
+            	TotalPage = data.TotalPage
+            	CurrentPage = data.CurrentPage
+            	var tablestring = "";
+            	var arr = data.Data
+                for (var i in arr) {
+                    var jsonObj = arr[i];
+                    tablestring += "<tr><td>" + jsonObj.Name + "</td><td>" + jsonObj.Designation + "</td><td>" + jsonObj.Timestamp + "</td><td>" + jsonObj.Value + "</td></tr>"
                     }
+                $("#tb").html("<tr class='list-users'><th>标识</th><th>名称</th><th>更新时间</th><th>值</th></tr>"+tablestring);
                 },
                 error: function (msg) {
                     alert("出错了！");
@@ -205,8 +219,8 @@ var Page = 2;
 
 $(function () {
     $("#pagination1").bootstrapPaginator({
-      currentPage: Page,
-      totalPages: Page,
+      currentPage: TotalPage,
+      totalPages: CurrentPage,
       bootstrapMajorVersion: 3,
       size: "small",
       onPageClicked: function(e,originalEvent,type,page){

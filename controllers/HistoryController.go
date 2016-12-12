@@ -39,12 +39,15 @@ func (this *HistoryController) GetSensorList() {
 }
 
 func (this *HistoryController) GetHistoryData() {
+	beego.Debug("Page:")
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
 	Did := this.GetString("did")
 	Name := this.GetString("name")
 	Start := this.GetString("start")
 	End := this.GetString("end")
-
-	models.GetHistory(username, password, Did, Name, Start, End)
-
+	Page := this.GetString("page")
+	result := models.GetHistory(username, password, Did, Name, Start, End, Page)
+	beego.Debug("result:", result)
+	this.Data["json"] = &result
+	this.ServeJSON()
 }

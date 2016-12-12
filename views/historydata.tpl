@@ -36,7 +36,7 @@
 	</tr>
 	</div>
   </table>
-<table class="table table-striped table-bordered table-condensed">
+<table class="table table-striped table-bordered table-condensed" id = "tb">
 	<tr class="list-users">
 		<th>标识</th>
 		<th>名称</th>

@@ -4,11 +4,12 @@ import (
 	//"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/bitly/go-simplejson" // for json get
-	// "orskycloud-go/cache_module"
+	"orskycloud-go/cache_module"
 	"orskycloud-go/comm"
 	// "orskycloud-go/utils"
 	"strings"
 	// "time"
+	"strconv"
 )
 
 type DevSenList struct {
@@ -65,7 +66,8 @@ func GetDevSenList(username string, password string) []DevSenList {
 }
 
 type S_List struct {
-	Name string
+	Name        string
+	Designation string
 }
 
 func GetSenSor(username string, password string, Did string) []S_List {
@@ -87,6 +89,7 @@ func GetSenSor(username string, password string, Did string) []S_List {
 	var s_tmp S_List
 	for i := 0; i < Get_json_array_len(s_json); i++ {
 		s_tmp.Name, _ = s_json.GetIndex(i).Get("name").String()
+		s_tmp.Designation, _ = s_json.GetIndex(i).Get("designation").String()
 		beego.Debug("Name:", s_tmp)
 		s_list = append(s_list, s_tmp)
 	}
@@ -96,7 +99,7 @@ func GetSenSor(username string, password string, Did string) []S_List {
 	return s_list
 }
 
-func ReturnSelectHistory(username, password, Did, Name, Start, End string) {
+func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]HistoryData, int) {
 	client, err := red.Get()
 	ErrHandlr(err)
 
@@ -108,32 +111,99 @@ func ReturnSelectHistory(username, password, Did, Name, Start, End string) {
 	ErrHandlr(err)
 	var Data []HistoryData
 	var tmp_data HistoryData
+	var designation string
+	var Count = 0
+	sensor_json := dev_json.Get("Sensor")
+	for i := 0; i < Get_json_array_len(sensor_json); i++ {
+		tmp, _ := sensor_json.GetIndex(i).Get("name").String()
+		if tmp == Name {
+			designation, _ = sensor_json.GetIndex(i).Get("designation").String()
+			break
+		}
+	}
 	data_json := dev_json.Get("data")
 	for i := 0; i < Get_json_array_len(data_json); i++ {
-		tmp, _ := data_json.GetIndex(i).Get("name")
+		tmp, _ := data_json.GetIndex(i).Get("name").String()
 		if tmp == Name {
-			timestamp, _ := data_json.GetIndex(i).Get("timestamp")
+			timestamp, _ := data_json.GetIndex(i).Get("timestamp").String()
 			if comm.CompareTime(Start, timestamp) == true && comm.CompareTime(timestamp, End) == true {
-				value, _ := data_json.GetIndex(i).Get("value")
-				tmp_data.Name = tmp
-				tmp_data.timestamp = timestamp
-
+				value, _ := data_json.GetIndex(i).Get("value").String()
+				tmp_data.Name = Name
+				tmp_data.Timestamp = timestamp
+				tmp_data.Value = value
+				tmp_data.Designation = designation
+				Data = append(Data, tmp_data) //save value
+				Count++
 			}
 		}
 	}
+
+	red.Put(client)
+	return Data, Count
+
+}
+func PaginationSelectData(username, password, Did, Name, Start, End string, Page int) ([]HistoryData, int, int) {
+	key := beego.AppConfig.String("cache.historydata.key")
+	pageSize, _ := beego.AppConfig.Int("history.page.size")
+	var tp int //total page
+	var ret_count int
+	if cache_module.IsExistCache(key) == false {
+		beego.Debug("history data cache not exist.")
+		Data, count := ReturnSelectHistory(username, password, Did, Name, Start, End)
+		ret_count = count
+		tp = count / pageSize
+		lastPageSize := 0
+		if count%pageSize > 0 {
+			tp = count/pageSize + 1
+			lastPageSize = count % pageSize
+		}
+
+		cacheHistoryData := make([][]HistoryData, tp)
+		for i := 0; i < tp; i++ {
+			if i == (tp-1) && lastPageSize != 0 {
+				cacheHistoryData[i] = make([]HistoryData, lastPageSize)
+				temp := Data[(i * pageSize):(i*pageSize + lastPageSize)]
+				copy(cacheHistoryData[i], temp)
+			} else {
+				cacheHistoryData[i] = make([]HistoryData, pageSize)
+				temp := Data[(i * pageSize):(i*pageSize + pageSize)]
+				copy(cacheHistoryData[i], temp)
+			}
+		}
+		cache_module.PutCache(key, cacheHistoryData, 1000*1000)
+	}
+
+	ret_data := cache_module.GetCache(key).([][]HistoryData)
+	return ret_data[Page-1], tp, ret_count
+
 }
 
-func GetHistory(username, password, Did, Name, Start, End string) {
-	client, err := red.Get()
-	ErrHandlr(err)
+type Pagination struct {
+	TotalPage   int
+	CurrentPage int
+	Count       int
+	Data        []HistoryData
+}
 
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
-	userkey, _ := client.Cmd("hget", "User", key).Str()
-	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
-	dev_json, err := simplejson.NewJson([]byte(dev_info))
-	ErrHandlr(err)
-	data_json := dev_json.Get("data")
+func GetHistory(username, password, Did, Name, Start, End string, Page string) Pagination {
+
+	page, _ := strconv.Atoi(Page)
+	//返回的数据：CurrentPage, TotalPage, 选中页的数据
+	data, totalpage, count := PaginationSelectData(username, password, Did, Name, Start, End, page)
+
+	ret_data := Pagination{totalpage, page, count, data}
+
+	return ret_data
+	// client, err := red.Get()
+	// ErrHandlr(err)
+
+	// //key := username + "#" + comm.Md5_go(password)
+	// key := username + "#" + password
+	// userkey, _ := client.Cmd("hget", "User", key).Str()
+	// dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
+	// dev_json, err := simplejson.NewJson([]byte(dev_info))
+	// ErrHandlr(err)
+	// data_json := dev_json.Get("data")
 	// {
 	//            "sensor": "weight",
 	//            "timestamp": "2016-10-20 14:50:30",
