@@ -1,5 +1,4 @@
 <script type="text/javascript">
-
 function SelectTime()
 {
 	var CurrentSelected = document.getElementById("select").value
@@ -159,11 +158,19 @@ function AddSensorItem()
 
 document.onload = AddSensorItem()  //页面加载完自动执行此方法
 
-//声明两个全局变量
+function SearchHistory(Page){
+	//声明两个全局变量
 var TotalPage
 var CurrentPage
-function SearchHistory(Page){
-	Page = 1
+var page
+	if(Page){
+		page = Page
+	}
+	else{
+		page = 1
+	}
+
+	//alert(page)
 	var h_did  = document.getElementById("did").value
 	var h_name = document.getElementById("s_name").value
 	var start  = document.getElementById("start").value
@@ -184,22 +191,18 @@ function SearchHistory(Page){
 		return;
 	}
 
-// <tr>
-// 		<td>1</td>
-// 		<td>2</td>
-// 		<td>3</td>
-// 		<td>4</td>
-// 	</tr>
-alert("test")
 	$.ajax({
 			async: false,
             url: "/history/data",    //后台webservice里的方法名称
             type: "post",
-            data:{"did": Did, "name": h_name, "start":start, "end":end, "page":Page},
+            data:{"did": h_did, "name": h_name, "start":start, "end":end, "page":page},
             traditional: true,
             success: function (data) {
             	TotalPage = data.TotalPage
             	CurrentPage = data.CurrentPage
+            	//alert("success")
+            	//alert(TotalPage)
+            	//alert(CurrentPage)
             	var tablestring = "";
             	var arr = data.Data
                 for (var i in arr) {
@@ -213,20 +216,40 @@ alert("test")
                 }
             });
 
-}
-
-var Page = 2;
-
 $(function () {
+	//alert("pagination1")
+	//alert(TotalPage)
+	// var pageno = CurrentPage
+	// var allpage = TotalPage
     $("#pagination1").bootstrapPaginator({
-      currentPage: TotalPage,
-      totalPages: CurrentPage,
+      currentPage: CurrentPage,
+      totalPages: TotalPage,
       bootstrapMajorVersion: 3,
       size: "small",
       onPageClicked: function(e,originalEvent,type,page){
-        window.location.href = "/mysensor/" + page
+        //window.location.href = "/mysensor/" + page
+        SearchHistory(page);
       }
     });
   });
+
+}
+
+// $(function () {
+// 	alert("pagination1")
+// 	alert(TotalPage)
+// 	// var pageno = CurrentPage
+// 	// var allpage = TotalPage
+//     $("#pagination1").bootstrapPaginator({
+//       currentPage: CurrentPage,
+//       totalPages: TotalPage,
+//       bootstrapMajorVersion: 3,
+//       size: "small",
+//       onPageClicked: function(e,originalEvent,type,page){
+//         //window.location.href = "/mysensor/" + page
+//         SearchHistory(page);
+//       }
+//     });
+//   });
 
 </script>

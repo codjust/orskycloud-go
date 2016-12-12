@@ -43,12 +43,12 @@
 		<th>更新时间</th>
 		<th>值</th>
 	</tr>
-	<tr>
+	<!-- <tr>
 		<td>1</td>
 		<td>2</td>
 		<td>3</td>
 		<td>4</td>
-	</tr>
+	</tr> -->
 </table>
 <div class="pagination">
 	<ul class="pagination" id="pagination1"></ul>

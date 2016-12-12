@@ -100,6 +100,7 @@ func GetSenSor(username string, password string, Did string) []S_List {
 }
 
 func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]HistoryData, int) {
+	beego.Debug("ReturnSelectHistory:")
 	client, err := red.Get()
 	ErrHandlr(err)
 
@@ -118,21 +119,28 @@ func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]Hi
 		tmp, _ := sensor_json.GetIndex(i).Get("name").String()
 		if tmp == Name {
 			designation, _ = sensor_json.GetIndex(i).Get("designation").String()
+			beego.Debug("ReturnSelectHistory:Designation", designation)
 			break
 		}
 	}
 	data_json := dev_json.Get("data")
 	for i := 0; i < Get_json_array_len(data_json); i++ {
-		tmp, _ := data_json.GetIndex(i).Get("name").String()
+		tmp, _ := data_json.GetIndex(i).Get("sensor").String()
+		beego.Debug("ReturnSelectHistory: Name", tmp)
 		if tmp == Name {
 			timestamp, _ := data_json.GetIndex(i).Get("timestamp").String()
+			beego.Debug("ReturnSelectHistory:in for", i)
 			if comm.CompareTime(Start, timestamp) == true && comm.CompareTime(timestamp, End) == true {
-				value, _ := data_json.GetIndex(i).Get("value").String()
+				//value, _ := data_json.GetIndex(i).Get("value").String()
+				v_tmp, _ := data_json.GetIndex(i).Get("value").Int()
+				value := strconv.Itoa(v_tmp)
+				beego.Debug("ReturnSelectHistory:value", v_tmp)
 				tmp_data.Name = Name
 				tmp_data.Timestamp = timestamp
 				tmp_data.Value = value
 				tmp_data.Designation = designation
 				Data = append(Data, tmp_data) //save value
+				beego.Debug("ReturnSelectHistory:tmp_data", tmp_data)
 				Count++
 			}
 		}
@@ -193,21 +201,6 @@ func GetHistory(username, password, Did, Name, Start, End string, Page string) P
 
 	ret_data := Pagination{totalpage, page, count, data}
 
+	beego.Debug("GetHistory:ret_data->:", ret_data)
 	return ret_data
-	// client, err := red.Get()
-	// ErrHandlr(err)
-
-	// //key := username + "#" + comm.Md5_go(password)
-	// key := username + "#" + password
-	// userkey, _ := client.Cmd("hget", "User", key).Str()
-	// dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
-	// dev_json, err := simplejson.NewJson([]byte(dev_info))
-	// ErrHandlr(err)
-	// data_json := dev_json.Get("data")
-	// {
-	//            "sensor": "weight",
-	//            "timestamp": "2016-10-20 14:50:30",
-	//            "value": 78
-	//    }
-
 }
