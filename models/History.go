@@ -4,7 +4,7 @@ import (
 	//"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/bitly/go-simplejson" // for json get
-	"orskycloud-go/cache_module"
+	//"orskycloud-go/cache_module"
 	"orskycloud-go/comm"
 	// "orskycloud-go/utils"
 	"strings"
@@ -99,11 +99,11 @@ func GetSenSor(username string, password string, Did string) []S_List {
 	return s_list
 }
 
-func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]HistoryData, int) {
-	beego.Debug("ReturnSelectHistory:")
+func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]HistoryData, int, bool) {
 	client, err := red.Get()
 	ErrHandlr(err)
 
+	var IsEmpty bool
 	//key := username + "#" + comm.Md5_go(password)
 	key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
@@ -123,6 +123,7 @@ func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]Hi
 			break
 		}
 	}
+
 	data_json := dev_json.Get("data")
 	for i := 0; i < Get_json_array_len(data_json); i++ {
 		tmp, _ := data_json.GetIndex(i).Get("sensor").String()
@@ -146,47 +147,52 @@ func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]Hi
 		}
 	}
 
-	red.Put(client)
-	return Data, Count
-
-}
-func PaginationSelectData(username, password, Did, Name, Start, End string, Page int) ([]HistoryData, int, int) {
-	key := beego.AppConfig.String("cache.historydata.key")
-	pageSize, _ := beego.AppConfig.Int("history.page.size")
-	var tp int //total page
-	var ret_count int
-	if cache_module.IsExistCache(key) == false {
-		beego.Debug("history data cache not exist.")
-		Data, count := ReturnSelectHistory(username, password, Did, Name, Start, End)
-		ret_count = count
-		tp = count / pageSize
-		lastPageSize := 0
-		if count%pageSize > 0 {
-			tp = count/pageSize + 1
-			lastPageSize = count % pageSize
-		}
-
-		cacheHistoryData := make([][]HistoryData, tp)
-		for i := 0; i < tp; i++ {
-			if i == (tp-1) && lastPageSize != 0 {
-				cacheHistoryData[i] = make([]HistoryData, lastPageSize)
-				temp := Data[(i * pageSize):(i*pageSize + lastPageSize)]
-				copy(cacheHistoryData[i], temp)
-			} else {
-				cacheHistoryData[i] = make([]HistoryData, pageSize)
-				temp := Data[(i * pageSize):(i*pageSize + pageSize)]
-				copy(cacheHistoryData[i], temp)
-			}
-		}
-		cache_module.PutCache(key, cacheHistoryData, 1000*1000)
+	if Count == 0 {
+		IsEmpty = false //返回数据为空
+	} else {
+		IsEmpty = true
 	}
 
-	ret_data := cache_module.GetCache(key).([][]HistoryData)
-	return ret_data[Page-1], tp, ret_count
+	red.Put(client)
+	return Data, Count, IsEmpty
 
+}
+func PaginationSelectData(username, password, Did, Name, Start, End string, Page int) ([]HistoryData, int, int, bool) {
+	//key := beego.AppConfig.String("cache.historydata.key")
+	pageSize, _ := beego.AppConfig.Int("history.page.size")
+	var tp int //total page
+	//if cache_module.IsExistCache(key) == false {
+	beego.Debug("history data cache not exist.")
+	Data, ret_count, IsEmpty := ReturnSelectHistory(username, password, Did, Name, Start, End)
+	if IsEmpty == false {
+		return Data, tp, ret_count, false
+	}
+	tp = ret_count / pageSize
+	lastPageSize := 0
+	if ret_count%pageSize > 0 {
+		tp = ret_count/pageSize + 1
+		lastPageSize = ret_count % pageSize
+	}
+	cacheHistoryData := make([][]HistoryData, tp)
+	for i := 0; i < tp; i++ {
+		if i == (tp-1) && lastPageSize != 0 {
+			cacheHistoryData[i] = make([]HistoryData, lastPageSize)
+			temp := Data[(i * pageSize):(i*pageSize + lastPageSize)]
+			copy(cacheHistoryData[i], temp)
+		} else {
+			cacheHistoryData[i] = make([]HistoryData, pageSize)
+			temp := Data[(i * pageSize):(i*pageSize + pageSize)]
+			copy(cacheHistoryData[i], temp)
+		}
+	}
+	//cache_module.PutCache(key, cacheHistoryData, 1000*1000)
+	//}
+	ret_data := cacheHistoryData
+	return ret_data[Page-1], tp, ret_count, true
 }
 
 type Pagination struct {
+	IsEmpty     bool
 	TotalPage   int
 	CurrentPage int
 	Count       int
@@ -197,9 +203,9 @@ func GetHistory(username, password, Did, Name, Start, End string, Page string) P
 
 	page, _ := strconv.Atoi(Page)
 	//返回的数据：CurrentPage, TotalPage, 选中页的数据
-	data, totalpage, count := PaginationSelectData(username, password, Did, Name, Start, End, page)
+	data, totalpage, count, isempty := PaginationSelectData(username, password, Did, Name, Start, End, page)
 
-	ret_data := Pagination{totalpage, page, count, data}
+	ret_data := Pagination{isempty, totalpage, page, count, data}
 
 	beego.Debug("GetHistory:ret_data->:", ret_data)
 	return ret_data

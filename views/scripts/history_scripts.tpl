@@ -88,34 +88,57 @@ var lastMonthEndDate = new Date(nowYear, lastMonth, getMonthDays(lastMonth));
 return formatDate(lastMonthEndDate);
 }
 
+function formatTime(Hour,Minute,Second){
+    if(Hour < 10){
+      Hour = "0" + Hour
+    }
+    if(Minute < 10){
+      Minute = "0" + Minute
+    }
+    if(Second < 10){
+      Second = "0" + Second
+    }
+    return Hour + ":" + Minute + ":" + Second
+}
 
    var StartTime = "";
    var EndTime = "";
    switch(CurrentSelected)
    {
    	case "day":
-   		EndTime		= Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
-   		Day = Day - 1 ;
-   		StartTime   = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
+      var TempDay = Day;
+      if(Month < 10) {
+        Month = "0" + Month;
+      }
+      if(Day < 10){
+        Day = "0" + Day
+      }
+   		EndTime		= Year + "-" + Month + "-" + Day + " " +  formatTime(Hour,Minute,Second);
+      TempDay = TempDay - 1 ;
+      if(TempDay < 10 )
+      {
+        TempDay = "0" + TempDay;
+      }
+   		StartTime   = Year + "-" + Month + "-" + TempDay + " " + formatTime(Hour,Minute,Second);
    		document.getElementById("start").value = StartTime
    		document.getElementById("end").value = EndTime
    		break;
    	case "week":
-   		StartTime = getWeekStartDate() + " " + Hour + ":" + Minute + ":" + Second;
-   		EndTime   = getWeekEndDate() + " " + Hour + ":" + Minute + ":" + Second;
+   		StartTime = getWeekStartDate() + " " + formatTime(Hour,Minute,Second);
+   		EndTime   = getWeekEndDate() + " " + formatTime(Hour,Minute,Second);
    		document.getElementById("start").value = StartTime
    		document.getElementById("end").value = EndTime
    		break;
    	case "month":
-   		StartTime = getMonthStartDate() + " " + Hour + ":" + Minute + ":" + Second;
-   		EndTime   = getMonthEndDate() + " " + Hour + ":" + Minute + ":" + Second;
+   		StartTime = getMonthStartDate() + " " + formatTime(Hour,Minute,Second);
+   		EndTime   = getMonthEndDate() + " " + formatTime(Hour,Minute,Second);
    		document.getElementById("start").value = StartTime
    		document.getElementById("end").value = EndTime
    		break;
    	case "year":
-   		EndTime = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
+   		EndTime = Year + "-" + Month + "-" + Day + " " + formatTime(Hour,Minute,Second);
    		Year = Year - 1;
-   		StartTime   = Year + "-" + Month + "-" + Day + " " + Hour + ":" + Minute + ":" + Second;
+   		StartTime   = Year + "-" + Month + "-" + Day + " " + formatTime(Hour,Minute,Second);
    		document.getElementById("start").value = StartTime
    		document.getElementById("end").value = EndTime
    		break;
@@ -198,11 +221,13 @@ var page
             data:{"did": h_did, "name": h_name, "start":start, "end":end, "page":page},
             traditional: true,
             success: function (data) {
+              var Flag  = data.IsEmpty;
+              if(Flag == false) {
+                alert("该传感器数据为空或该时间段时间为空！")
+                return;
+              }
             	TotalPage = data.TotalPage
             	CurrentPage = data.CurrentPage
-            	//alert("success")
-            	//alert(TotalPage)
-            	//alert(CurrentPage)
             	var tablestring = "";
             	var arr = data.Data
                 for (var i in arr) {
