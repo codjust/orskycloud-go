@@ -2,7 +2,7 @@
 	<div>
 	<tr>
 		<th><p style = "font-size: 15px">传感器：</p></th>
-		<td><select id="did" style="width:120px" onchange="AddSensorItem()">
+		<td><select id="did" style="width:120px" onchange="AddSensorItem('did', 's_name')">
 		{{range .Data}}
 		<option value='{{.Did}}'>{{.Dev_Name}}</option>
 		{{end}}

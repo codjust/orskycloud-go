@@ -153,10 +153,9 @@ function formatTime(Hour,Minute,Second){
 }
 
 
-function AddSensorItem()
+function AddSensorItem(did,select)
 {
-    var Did = document.getElementById("did").value;
-    //alert(Did)
+    var Did = document.getElementById(did).value;
     $.ajax({
             async: false,
             url: "/history/list",    //后台webservice里的方法名称
@@ -168,7 +167,7 @@ function AddSensorItem()
                 for (var i in data) {
                     var jsonObj =data[i];
                         optionstring += "<option value=\"" + jsonObj.Name + "\" >" + jsonObj.Designation + "</option>";
-                        $("#s_name").html("<option value='请选择'>请选择...</option> "+optionstring);
+                        $("#" + select).html("<option value='请选择'>请选择...</option> "+optionstring);
                     }
                 },
                 error: function (msg) {

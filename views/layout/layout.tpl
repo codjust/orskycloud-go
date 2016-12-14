@@ -55,7 +55,8 @@
                                 <li><a href="/mysensor">传感器管理</a></li>
                             </ul>
                         </li>
-                        <li><a href="stats.html">数据统计</a></li>
+                        <li><a href="/history">数据统计</a></li>
+                        <li><a href="/history">开发者指南</a></li>
                     </ul>
                 </div>
             </div>
@@ -73,7 +74,7 @@
                         <li class="nav-header"><i class="icon-signal"></i>数据统计</li>
                         <li class='{{.Active_History}}'><a href="/history">历史数据</a></li>
                         <li class='{{.Active_Trend}}'><a href="/history/trend">历史走势</a></li>
-                        <li class='{{.Active}}'><a href="visitor-stats.html">数据对比</a></li>
+                        <li class='{{.Active_Compare}}'><a href="/history/compare">数据对比</a></li>
                         <li class="nav-header"><i class="icon-user"></i> 资料</li>
                         <li class='{{.Active_Profile}}'><a href="/myprofile">我的资料</a></li>
                         <li class='{{.Active_UpdatePwd}}'><a href="/updatepwd">修改密码</a></li>
@@ -97,7 +98,7 @@
         <hr>
 
         <footer class="well">
-            &copy; You Will love it!<a href="/homepage" target="_blank">ORSkyCloud</a>
+            &copy; You Will love it!<a href="/homepage" target="_blank">&nbsp;ORSkyCloud</a>
         </footer>
 
     </div>
@@ -109,12 +110,9 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/bootstrap-paginator.min.js"></script>
     <script src="/static/js/jqPaginator.min.js"></script>
-    <script src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script> -->
+    <script src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
     <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
     <script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
-
-    <!-- <script src="/static/js/highcharts.js"></script>
-    <script src="/static/js/highcharts/modules/exporting.js"></script> -->
     {{.Scripts}}
 </body>
 

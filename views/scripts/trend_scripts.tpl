@@ -1,7 +1,7 @@
 <script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript">
 
-document.onload = AddSensorItem()  //页面加载完自动执行此方法
+document.onload = AddSensorItem("did", "s_name")  //页面加载完自动执行此方法
 SelectTime()
 
 function CreateCharts(data){
@@ -12,7 +12,8 @@ function CreateCharts(data){
     var unit
     unit = Arr[0].Unit
     name = Arr[0].Name
-    var Value = "{name:'" + name + "',data:[";
+    designation = Arr[0].Designation
+    var Value = "{name:'" + designation + "',data:[";
     var Timestamp = "[";
     for(var i in Arr)
     {
@@ -39,7 +40,7 @@ function CreateCharts(data){
             },
             yAxis: {
                 title: {
-                    text: eval("'" + name + "'")
+                    text: eval("'" + name +"(" + unit + ")'")
                 },
                 plotLines: [{
                     value: 0,

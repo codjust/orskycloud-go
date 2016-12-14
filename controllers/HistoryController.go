@@ -71,7 +71,6 @@ func (this *HistoryController) DeleteHistoryData() {
 
 func (this *HistoryController) HistoryTrend() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-
 	exp_data := models.GetDevSenList(username, password)
 	this.Data["Data"] = exp_data
 	this.TplName = "historytrend.tpl"
@@ -83,15 +82,40 @@ func (this *HistoryController) HistoryTrend() {
 }
 
 func (this *HistoryController) HistoryTrendData() {
-	beego.Debug("XXXXXXXXXXXXXXXXXXXX")
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
 	Did := this.GetString("did")
 	Name := this.GetString("name")
 	Start := this.GetString("start")
 	End := this.GetString("end")
-	Page := this.GetString("page")
-	beego.Debug("Page:", Did, Name, Start, End, Page)
+	//	Page := this.GetString("page")
 	result := models.GetHistoryTrendData(username, password, Did, Name, Start, End)
+	beego.Debug("result:", result)
+	this.Data["json"] = &result
+	this.ServeJSON()
+}
+
+func (this *HistoryController) DataCompare() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	exp_data := models.GetDevSenList(username, password)
+	this.Data["Data"] = exp_data
+	this.TplName = "datacompare.tpl"
+	this.Data["Active_Compare"] = "active"
+	this.Layout = "layout/layout.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Scripts"] = "scripts/datacompare_scripts.tpl"
+	this.Data["User"] = username
+}
+
+func (this *HistoryController) AnalysisDataCompare() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	Did1 := this.GetString("did1")
+	Did2 := this.GetString("did2")
+	Name1 := this.GetString("name1")
+	Name2 := this.GetString("name2")
+	Start := this.GetString("start")
+	End := this.GetString("end")
+
+	result := models.GetAnalysisData(username, password, Did1, Did2, Name1, Name2, Start, End)
 	beego.Debug("result:", result)
 	this.Data["json"] = &result
 	this.ServeJSON()

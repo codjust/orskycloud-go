@@ -303,3 +303,21 @@ func GetHistoryTrendData(username, password, Did, Name, Start, End string) Trend
 	ret_data := TrendData{IsEmpty, Count, ExpData}
 	return ret_data
 }
+
+type CompareData struct {
+	IsEmpty1      bool
+	IsEmpty2      bool
+	Count1        int
+	Count2        int
+	ExpDataFirst  []HistoryData
+	ExpDataSecond []HistoryData
+}
+
+func GetAnalysisData(username, password, Did1, Did2, Name1, Name2, Start, End string) CompareData {
+	ExpData1, Count1, IsEmpty1 := ReturnSelectHistory(username, password, Did1, Name1, Start, End)
+	ExpData2, Count2, IsEmpty2 := ReturnSelectHistory(username, password, Did2, Name2, Start, End)
+
+	ret_data := CompareData{IsEmpty1, IsEmpty2, Count1, Count2, ExpData1, ExpData2}
+
+	return ret_data
+}

@@ -45,4 +45,8 @@ func init() {
 	beego.Router("/history/trend", &controllers.HistoryController{}, "Get:HistoryTrend")
 	beego.Router("/history/trend/data", &controllers.HistoryController{}, "POST:HistoryTrendData")
 
+	//数据对比
+	beego.Router("/history/compare", &controllers.HistoryController{}, "GET:DataCompare")
+	beego.Router("/history/compare/analysis", &controllers.HistoryController{}, "POST:AnalysisDataCompare")
+
 }
