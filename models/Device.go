@@ -33,8 +33,8 @@ func ReturnAllDevices(username, password string) ([]Device, int) {
 	var devices []Device
 	var device Device
 	count := 0
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
 	//beego.Debug("list:", device_list_temp)
@@ -140,8 +140,8 @@ func DeleteDeviceOp(username string, password string, did string) string {
 	client, err := red.Get()
 	ErrHandlr(err)
 
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
 	devices_list := strings.Split(device_list_temp, "#")
@@ -187,8 +187,8 @@ func ReturnByIdDeviceInfo(username string, password string, did string) Device {
 	client, err := red.Get()
 	ErrHandlr(err)
 
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+did).String()
 	dev_json, err := simplejson.NewJson([]byte(dev_info))
@@ -208,8 +208,8 @@ func UpdateDeviceInfo(username string, password string, dev_info Device) string 
 	client, err := red.Get()
 	ErrHandlr(err)
 
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	deviceInfo := client.Cmd("hget", "uid:"+userkey, "did:"+dev_info.ID).String()
 	dev_json, err := simplejson.NewJson([]byte(deviceInfo))

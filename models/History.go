@@ -30,8 +30,8 @@ func GetDevSenList(username string, password string) []DevSenList {
 	client, err := red.Get()
 	ErrHandlr(err)
 
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 
 	var ret_array []DevSenList
@@ -75,8 +75,8 @@ func GetSenSor(username string, password string, Did string) []S_List {
 	client, err := red.Get()
 	ErrHandlr(err)
 
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
 	dev_json, err := simplejson.NewJson([]byte(dev_info))
@@ -105,8 +105,8 @@ func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]Hi
 	ErrHandlr(err)
 
 	var IsEmpty bool
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
 	dev_json, err := simplejson.NewJson([]byte(dev_info))
@@ -224,8 +224,8 @@ func DeleteSelectData(username, password, Did, Name, Start, End string) string {
 	client, err := red.Get()
 	ErrHandlr(err)
 
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
 	dev_json, err := simplejson.NewJson([]byte(dev_info))

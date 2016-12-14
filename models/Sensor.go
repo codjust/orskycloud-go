@@ -7,6 +7,7 @@ import (
 	"orskycloud-go/cache_module"
 	"orskycloud-go/utils"
 	//"reflect"
+	"orskycloud-go/comm"
 	"strings"
 )
 
@@ -41,7 +42,8 @@ func ReturnSensorInfo(username string, password string) ([]Sensor, int) {
 	var SensorInfo []Sensor
 	var temp_sensor Sensor
 	count := 0
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
 	devices_list := strings.Split(device_list_temp, "#")
@@ -125,7 +127,8 @@ func ReturnDevList(username, password string) []Dev_Temp {
 
 	var d_list []Dev_Temp
 	var dev_temp Dev_Temp
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
 	devices_list := strings.Split(device_list_temp, "#")
@@ -146,7 +149,8 @@ func ReturnDevList(username, password string) []Dev_Temp {
 func CreateNewSensor(username string, password string, sensor Sensor) string {
 	client, err := red.Get()
 	ErrHandlr(err)
-	key := username + "#" + password
+	//key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+sensor.Did).String()
 	dev_json, err := simplejson.NewJson([]byte(dev_info))
@@ -170,9 +174,7 @@ func CreateNewSensor(username string, password string, sensor Sensor) string {
 		element["unit"], _ = sensorList.GetIndex(i).Get("unit").String()
 		element["designation"], _ = sensorList.GetIndex(i).Get("designation").String()
 		element["createTime"], _ = sensorList.GetIndex(i).Get("createTime").String()
-		//	beego.Debug("elememt->:", element)
 		tb_sensor = append(tb_sensor, element)
-		//	beego.Debug("tb_sensor->:", tb_sensor)
 	}
 	element := make(map[string]interface{})
 	element["name"] = sensor.Name
@@ -207,7 +209,8 @@ func DeleteCurrentSensor(username string, password string, name string, Did stri
 	beego.Debug("sensor name:", name, Did)
 	client, err := red.Get()
 	ErrHandlr(err)
-	key := username + "#" + password
+	//key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
 	dev_json, err := simplejson.NewJson([]byte(dev_info))
@@ -262,7 +265,8 @@ func DeleteCurrentSensor(username string, password string, name string, Did stri
 func ReturnSingalSensor(username string, password string, s_name string, s_did string) Sensor {
 	client, err := red.Get()
 	ErrHandlr(err)
-	key := username + "#" + password
+	//key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+s_did).String()
 	dev_json, err := simplejson.NewJson([]byte(dev_info))
@@ -290,7 +294,8 @@ func ReturnSingalSensor(username string, password string, s_name string, s_did s
 func ModifySensorInfo(username string, password string, s_info Sensor) string {
 	client, err := red.Get()
 	ErrHandlr(err)
-	key := username + "#" + password
+	//key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+s_info.Did).String()
 	dev_json, err := simplejson.NewJson([]byte(dev_info))

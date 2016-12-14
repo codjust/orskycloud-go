@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/astaxie/beego"
+	"orskycloud-go/comm"
 )
 
 type Profile struct {
@@ -19,8 +20,8 @@ func ReturnProfileInfo(username string, password string) Profile {
 	beego.Debug("return...")
 
 	var ProfileInfo Profile
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	ProfileInfo.UserName, _ = client.Cmd("hget", "uid:"+userkey, "username").Str()
 	ProfileInfo.UserKey = userkey
@@ -38,8 +39,8 @@ func UpdataProfileInfo(username string, password string, profile Profile) string
 	client, err := red.Get()
 	ErrHandlr(err)
 
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	newKey := profile.UserName + "#" + password
 	beego.Debug("newKey:", newKey)
@@ -70,8 +71,8 @@ func ModifyPwd(username string, password string, newpwd string) string {
 	client, err := red.Get()
 	ErrHandlr(err)
 
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
+	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	newKey := username + "#" + newpwd
 	client.Cmd("multi")
