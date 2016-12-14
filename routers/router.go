@@ -39,4 +39,5 @@ func init() {
 	beego.Router("/history", &controllers.HistoryController{}, "GET:HistoryPage")
 	beego.Router("/history/list", &controllers.HistoryController{}, "POST:GetSensorList")
 	beego.Router("/history/data", &controllers.HistoryController{}, "POST:GetHistoryData")
+	beego.Router("/history/delete", &controllers.HistoryController{}, "POST:DeleteHistoryData")
 }

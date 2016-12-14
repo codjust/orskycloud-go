@@ -210,3 +210,79 @@ func GetHistory(username, password, Did, Name, Start, End string, Page string) P
 	beego.Debug("GetHistory:ret_data->:", ret_data)
 	return ret_data
 }
+
+func DeleteSelectData(username, password, Did, Name, Start, End string) string {
+	var Ret_Data []map[string]interface{}
+	var ret_msg string
+	var IsEmpty bool
+	var fin_data []byte
+	IsEmpty = true
+	client, err := red.Get()
+	ErrHandlr(err)
+
+	//key := username + "#" + comm.Md5_go(password)
+	key := username + "#" + password
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+Did).String()
+	dev_json, err := simplejson.NewJson([]byte(dev_info))
+	ErrHandlr(err)
+
+	data_json := dev_json.Get("data")
+	StrLen := Get_json_array_len(data_json)
+	if StrLen == 0 {
+		IsEmpty = true
+		ret_msg = "empty"
+		goto End
+	}
+	for i := 0; i < StrLen; i++ {
+		sensor, _ := data_json.GetIndex(i).Get("sensor").String()
+		timestamp, _ := data_json.GetIndex(i).Get("timestamp").String()
+		if sensor == Name && comm.CompareTime(Start, timestamp) == true && comm.CompareTime(timestamp, End) == true {
+			beego.Debug("Query redis data ... ")
+			IsEmpty = false
+			break
+		}
+	}
+	if IsEmpty == true {
+		ret_msg = "empty"
+		goto End
+	}
+
+	for i := 0; i < StrLen; i++ {
+		sensor, _ := data_json.GetIndex(i).Get("sensor").String()
+		timestamp, _ := data_json.GetIndex(i).Get("timestamp").String()
+		if sensor == Name && comm.CompareTime(Start, timestamp) == true && comm.CompareTime(timestamp, End) == true {
+			continue
+		}
+		element := make(map[string]interface{})
+		element["sensor"], _ = data_json.GetIndex(i).Get("sensor").String()
+		element["timestamp"], _ = data_json.GetIndex(i).Get("timestamp").String()
+		element["value"], _ = data_json.GetIndex(i).Get("value").Int()
+		Ret_Data = append(Ret_Data, element)
+
+	}
+
+	if len(Ret_Data) != 0 {
+		dev_json.Set("data", Ret_Data)
+	} else {
+		element := make(map[string]interface{})
+		Ret_Data = append(Ret_Data, element)
+		dev_json.Set("data", Ret_Data)
+	}
+
+	fin_data, err = dev_json.MarshalJSON()
+	if err == nil {
+		r := client.Cmd("hset", "uid:"+userkey, "did:"+Did, fin_data)
+		if r.Err != nil {
+			ret_msg = "failed"
+		} else {
+			ret_msg = "success"
+		}
+	} else {
+		ErrHandlr(err)
+	}
+End:
+	red.Put(client)
+	//beego.Debug("Nothing happen", IsEmpty)
+	return ret_msg
+}

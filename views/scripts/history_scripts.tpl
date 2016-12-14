@@ -260,6 +260,55 @@ $(function () {
 
 }
 
+function DeleteHistory()
+{
+    //alert(page)
+  var h_did  = document.getElementById("did").value
+  var h_name = document.getElementById("s_name").value
+  var start  = document.getElementById("start").value
+  var end    = document.getElementById("end").value
+
+  //alert(h_name)
+  if(h_name == "请选择"){
+    alert("请选择要查询的传感器！")
+    return
+  }
+  //2015-12-11 19:27:57
+  var pattern = /\d{4}-\d{2}-\d{2}\s?\d{2}:\d{2}:(\d+)/
+  var r1 = pattern.test(start)
+  var r2 = pattern.test(end)
+  if(r1 == false || r2 == false)
+  {
+    alert("时间格式错误，请设置：2015-12-1 12:12:12")
+    return;
+  }
+
+  var isDelete = confirm("确定要删除该区间的数据吗？");
+//  alert("did:",Did)
+  if(isDelete == true){
+    $.ajax({
+    async: false,
+    type:"POST",
+    url:"/history/delete",
+    data:{"did": h_did, "name": h_name, "start":start, "end":end}
+    }).done(function(msg){
+    if(msg.Val == "success")
+    {
+      alert("删除成功！")
+      window.location.href = "/history"
+    }
+    else if(msg.Val == "failed")
+    {
+      alert("删除失败，数据库操作错误，请重试！")
+    }
+    else if(msg.Val == "empty")
+    {
+      alert("删除失败，选取区间无数据或该传感器数据为空！")
+    }
+  });
+  }
+
+}
 // $(function () {
 // 	alert("pagination1")
 // 	alert(TotalPage)

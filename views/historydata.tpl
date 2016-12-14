@@ -31,7 +31,7 @@
 		<div>
 		<td><input type="button" value="查询" class="btn btn-success btn-large" onclick="SearchHistory()" /></td>
 		<td>&nbsp;&nbsp;</td>
-		<td><input type="button" value="删除" class="btn btn-success btn-large" /></td>
+		<td><input type="button" value="删除" class="btn btn-success btn-large" onclick="DeleteHistory()" /></td>
 		</div>
 	</tr>
 	</div>

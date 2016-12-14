@@ -52,3 +52,19 @@ func (this *HistoryController) GetHistoryData() {
 	this.Data["json"] = &result
 	this.ServeJSON()
 }
+
+func (this *HistoryController) DeleteHistoryData() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	Did := this.GetString("did")
+	Name := this.GetString("name")
+	Start := this.GetString("start")
+	End := this.GetString("end")
+	beego.Debug("Page:", Did, Name, Start, End)
+
+	res := models.DeleteSelectData(username, password, Did, Name, Start, End)
+	result := struct {
+		Val string
+	}{res}
+	this.Data["json"] = &result
+	this.ServeJSON()
+}
