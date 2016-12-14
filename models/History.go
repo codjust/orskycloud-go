@@ -23,6 +23,7 @@ type HistoryData struct {
 	Designation string //描述或者别名
 	Timestamp   string //上传时间
 	Value       string //值
+	Unit        string //单位
 }
 
 func GetDevSenList(username string, password string) []DevSenList {
@@ -113,12 +114,14 @@ func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]Hi
 	var Data []HistoryData
 	var tmp_data HistoryData
 	var designation string
+	var unit string
 	var Count = 0
 	sensor_json := dev_json.Get("Sensor")
 	for i := 0; i < Get_json_array_len(sensor_json); i++ {
 		tmp, _ := sensor_json.GetIndex(i).Get("name").String()
 		if tmp == Name {
 			designation, _ = sensor_json.GetIndex(i).Get("designation").String()
+			unit, _ = sensor_json.GetIndex(i).Get("unit").String()
 			beego.Debug("ReturnSelectHistory:Designation", designation)
 			break
 		}
@@ -140,6 +143,7 @@ func ReturnSelectHistory(username, password, Did, Name, Start, End string) ([]Hi
 				tmp_data.Timestamp = timestamp
 				tmp_data.Value = value
 				tmp_data.Designation = designation
+				tmp_data.Unit = unit
 				Data = append(Data, tmp_data) //save value
 				beego.Debug("ReturnSelectHistory:tmp_data", tmp_data)
 				Count++
@@ -285,4 +289,17 @@ End:
 	red.Put(client)
 	//beego.Debug("Nothing happen", IsEmpty)
 	return ret_msg
+}
+
+type TrendData struct {
+	IsEmpty bool
+	Count   int
+	ExpData []HistoryData
+}
+
+func GetHistoryTrendData(username, password, Did, Name, Start, End string) TrendData {
+	ExpData, Count, IsEmpty := ReturnSelectHistory(username, password, Did, Name, Start, End)
+
+	ret_data := TrendData{IsEmpty, Count, ExpData}
+	return ret_data
 }

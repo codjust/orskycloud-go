@@ -68,3 +68,31 @@ func (this *HistoryController) DeleteHistoryData() {
 	this.Data["json"] = &result
 	this.ServeJSON()
 }
+
+func (this *HistoryController) HistoryTrend() {
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+
+	exp_data := models.GetDevSenList(username, password)
+	this.Data["Data"] = exp_data
+	this.TplName = "historytrend.tpl"
+	this.Data["Active_Trend"] = "active"
+	this.Layout = "layout/layout.tpl"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["Scripts"] = "scripts/trend_scripts.tpl"
+	this.Data["User"] = username
+}
+
+func (this *HistoryController) HistoryTrendData() {
+	beego.Debug("XXXXXXXXXXXXXXXXXXXX")
+	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	Did := this.GetString("did")
+	Name := this.GetString("name")
+	Start := this.GetString("start")
+	End := this.GetString("end")
+	Page := this.GetString("page")
+	beego.Debug("Page:", Did, Name, Start, End, Page)
+	result := models.GetHistoryTrendData(username, password, Did, Name, Start, End)
+	beego.Debug("result:", result)
+	this.Data["json"] = &result
+	this.ServeJSON()
+}

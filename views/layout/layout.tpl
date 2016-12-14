@@ -72,7 +72,7 @@
                         <li class='{{.Active_Sensor}}'><a href="/mysensor">传感器</a></li>
                         <li class="nav-header"><i class="icon-signal"></i>数据统计</li>
                         <li class='{{.Active_History}}'><a href="/history">历史数据</a></li>
-                        <li class='{{.Active}}'><a href="user-stats.html">历史走势</a></li>
+                        <li class='{{.Active_Trend}}'><a href="/history/trend">历史走势</a></li>
                         <li class='{{.Active}}'><a href="visitor-stats.html">数据对比</a></li>
                         <li class="nav-header"><i class="icon-user"></i> 资料</li>
                         <li class='{{.Active_Profile}}'><a href="/myprofile">我的资料</a></li>
@@ -103,11 +103,18 @@
     </div>
 
     <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/jquery-1.8.0.min.js"></script>
     <script src="/static/js/jquery.flot.js"></script>
     <script src="/static/js/jquery.flot.resize.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
-     <script src="/static/js/bootstrap-paginator.min.js"></script>
-     <script src="/static/js/jqPaginator.min.js"></script>
+    <script src="/static/js/bootstrap-paginator.min.js"></script>
+    <script src="/static/js/jqPaginator.min.js"></script>
+    <script src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script> -->
+    <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
+
+    <!-- <script src="/static/js/highcharts.js"></script>
+    <script src="/static/js/highcharts/modules/exporting.js"></script> -->
     {{.Scripts}}
 </body>
 

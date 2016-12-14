@@ -242,10 +242,6 @@ var page
             });
 
 $(function () {
-	//alert("pagination1")
-	//alert(TotalPage)
-	// var pageno = CurrentPage
-	// var allpage = TotalPage
     $("#pagination1").bootstrapPaginator({
       currentPage: CurrentPage,
       totalPages: TotalPage,
