@@ -29,7 +29,6 @@ type DeviceJson struct {
 func ReturnAllDevices(username, password string) ([]Device, int) {
 	client, err := red.Get()
 	ErrHandlr(err)
-	beego.Debug("return...")
 	var devices []Device
 	var device Device
 	count := 0
@@ -37,9 +36,7 @@ func ReturnAllDevices(username, password string) ([]Device, int) {
 	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
-	//beego.Debug("list:", device_list_temp)
 	devices_list := strings.Split(device_list_temp, "#")
-	//beego.Debug("devices_list:", devices_list)
 	for _, dev := range devices_list {
 		beego.Debug("dev:", dev)
 		count++
@@ -63,7 +60,7 @@ func ReturnAllDevices(username, password string) ([]Device, int) {
 
 func PageDevice(pageNo int, username string, password string) utils.Page {
 	devices, tp, count, pageSize := ReturnDeviceCacheData(username, password, pageNo)
-	beego.Debug("dev:", devices, pageNo)
+	//beego.Debug("dev:", devices, pageNo)
 	return utils.Page{PageNo: pageNo, PageSize: pageSize, TotalPage: tp, TotalCount: count, FirstPage: pageNo == 1, LastPage: pageNo == tp, List: devices}
 }
 
@@ -102,6 +99,21 @@ func ReturnDeviceCacheData(username string, password string, pageNum int) (inter
 	return devices[pageNum-1], tp, ret_count, pageSize
 }
 
+//判断是否有设备存在
+func IsExistDevice(username, password string) bool {
+	client, err := red.Get()
+	ErrHandlr(err)
+	key := username + "#" + comm.Md5_go(password)
+	userkey, _ := client.Cmd("hget", "User", key).Str()
+	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
+	red.Put(client)
+	if device_list_temp == "" {
+		return true
+	} else {
+		return false
+	}
+}
+
 func CreateNewDevice(username string, password string, dev_info Device) string {
 	localtime := time.Now().Format("2006-01-02 15:04:05")
 	//	exp_data := DeviceJson{deviceName: dev_info.DevName, description: dev_info.Description, createTime: localtime, Sensor: []*Device{}, data: []*Device{}}
@@ -112,15 +124,18 @@ func CreateNewDevice(username string, password string, dev_info Device) string {
 	beego.Debug("json:", exp_json)
 	client, err := red.Get()
 	ErrHandlr(err)
-	//key := username + "#" + comm.Md5_go(password)
-	key := username + "#" + password
+	key := username + "#" + comm.Md5_go(password)
 	userkey, _ := client.Cmd("hget", "User", key).Str()
-
 	// get did
 	did := client.Cmd("hincrby", "uid:"+userkey, "nextDeviceId", 1).String()
 	did = comm.Md5_go(did)
 	device_list := client.Cmd("hget", "uid:"+userkey, "device").String()
-	device_list = device_list + "#" + did
+	beego.Debug("device_list:", len(device_list))
+	if len(device_list) < 32 {
+		device_list = did
+	} else {
+		device_list = device_list + "#" + did
+	}
 	client.Cmd("multi")
 	client.Cmd("hset", "uid:"+userkey, "device", device_list)
 	client.Cmd("hset", "uid:"+userkey, "did:"+did, exp_json)

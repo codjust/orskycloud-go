@@ -5,6 +5,7 @@ import (
 	//"orskycloud-go/cache_module"
 	//"orskycloud-go/logicfunc"
 	"orskycloud-go/models"
+	"orskycloud-go/utils"
 	"os"
 	"strconv"
 	"time"
@@ -33,7 +34,14 @@ func (this *SensorController) MySensor() {
 			os.Exit(1)
 		}
 	}
-	sensors := models.PageSensor(pageNum, username, password)
+	flag := models.IsExistDevice(username, password)
+	var sensors utils.Page
+	if flag != true {
+		flag = models.IsExistSensor(username, password)
+		if flag == true {
+			sensors = models.PageSensor(pageNum, username, password)
+		}
+	}
 	this.Data["Page"] = sensors
 	this.Data["Active_Sensor"] = "active"
 	this.Layout = "layout/layout.tpl"

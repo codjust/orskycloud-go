@@ -73,11 +73,18 @@ func ReturnSensorInfo(username string, password string) ([]Sensor, int) {
 			count++
 		}
 	}
-
 	red.Put(client)
-	//beego.Debug("SensorInfo:", SensorInfo)
 	return SensorInfo, count
 
+}
+
+func IsExistSensor(username, password string) bool {
+	_, Count := ReturnSensorInfo(username, password)
+	if Count == 0 {
+		return false
+	} else {
+		return true
+	}
 }
 
 func ReturnSensorCacheData(username string, password string, pageNum int) (interface{}, int, int, int) {

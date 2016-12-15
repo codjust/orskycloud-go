@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"orskycloud-go/models"
+	"orskycloud-go/utils"
 	"os"
 	"strconv"
 )
@@ -13,7 +14,6 @@ type DeviceController struct {
 
 func (this *DeviceController) MyDevice() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-	beego.Debug("page:", this.Ctx.Input.Param(":page"))
 	var pageNum int
 	var err error
 	if this.Ctx.Input.Param(":page") == "" {
@@ -25,7 +25,11 @@ func (this *DeviceController) MyDevice() {
 			os.Exit(1)
 		}
 	}
-	page := models.PageDevice(pageNum, username, password)
+	flag := models.IsExistDevice(username, password)
+	var page utils.Page
+	if flag != true {
+		page = models.PageDevice(pageNum, username, password)
+	}
 	// this.Data["Devices"] = devices
 	this.Data["Page"] = page
 	this.Data["Active_Dev"] = "active"

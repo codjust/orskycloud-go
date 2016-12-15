@@ -18,7 +18,11 @@ func (this *HistoryController) HistoryPage() {
 
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
 
-	exp_data := models.GetDevSenList(username, password)
+	flag := models.IsExistDevice(username, password)
+	var exp_data []models.DevSenList
+	if flag != true {
+		exp_data = models.GetDevSenList(username, password)
+	}
 	this.Data["Data"] = exp_data
 	this.TplName = "historydata.tpl"
 	this.Data["Active_History"] = "active"
@@ -31,8 +35,11 @@ func (this *HistoryController) HistoryPage() {
 func (this *HistoryController) GetSensorList() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
 	Did := this.GetString("did")
-	beego.Debug("did:", Did)
-	ret_data := models.GetSenSor(username, password, Did)
+	flag := models.IsExistDevice(username, password)
+	var ret_data []models.S_List
+	if flag != true {
+		ret_data = models.GetSenSor(username, password, Did)
+	}
 	beego.Debug("ret_data", ret_data)
 	this.Data["json"] = &ret_data
 	this.ServeJSON()
@@ -71,7 +78,12 @@ func (this *HistoryController) DeleteHistoryData() {
 
 func (this *HistoryController) HistoryTrend() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-	exp_data := models.GetDevSenList(username, password)
+	flag := models.IsExistDevice(username, password)
+	var exp_data []models.DevSenList
+	if flag != true {
+		beego.Debug("xxxxxxxx")
+		exp_data = models.GetDevSenList(username, password)
+	}
 	this.Data["Data"] = exp_data
 	this.TplName = "historytrend.tpl"
 	this.Data["Active_Trend"] = "active"
@@ -96,7 +108,11 @@ func (this *HistoryController) HistoryTrendData() {
 
 func (this *HistoryController) DataCompare() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-	exp_data := models.GetDevSenList(username, password)
+	flag := models.IsExistDevice(username, password)
+	var exp_data []models.DevSenList
+	if flag != true {
+		exp_data = models.GetDevSenList(username, password)
+	}
 	this.Data["Data"] = exp_data
 	this.TplName = "datacompare.tpl"
 	this.Data["Active_Compare"] = "active"

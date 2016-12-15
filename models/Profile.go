@@ -17,11 +17,9 @@ type Profile struct {
 func ReturnProfileInfo(username string, password string) Profile {
 	client, err := red.Get()
 	ErrHandlr(err)
-	beego.Debug("return...")
 
 	var ProfileInfo Profile
 	key := username + "#" + comm.Md5_go(password)
-	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	ProfileInfo.UserName, _ = client.Cmd("hget", "uid:"+userkey, "username").Str()
 	ProfileInfo.UserKey = userkey
@@ -29,7 +27,6 @@ func ReturnProfileInfo(username string, password string) Profile {
 	ProfileInfo.EMail, _ = client.Cmd("hget", "uid:"+userkey, "email").Str()
 	ProfileInfo.DevCount, _ = client.Cmd("hget", "uid:"+userkey, "count").Str()
 	ProfileInfo.SignTime, _ = client.Cmd("hget", "uid:"+userkey, "sign_up_time").Str()
-
 	red.Put(client)
 
 	return ProfileInfo
@@ -42,8 +39,7 @@ func UpdataProfileInfo(username string, password string, profile Profile) string
 	key := username + "#" + comm.Md5_go(password)
 	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
-	newKey := profile.UserName + "#" + password
-	beego.Debug("newKey:", newKey)
+	newKey := profile.UserName + "#" + comm.Md5_go(password)
 	client.Cmd("multi")
 	r := client.Cmd("hset", "uid:"+userkey, "username", profile.UserName)
 	ErrHandlr(r.Err)
@@ -74,7 +70,7 @@ func ModifyPwd(username string, password string, newpwd string) string {
 	key := username + "#" + comm.Md5_go(password)
 	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
-	newKey := username + "#" + newpwd
+	newKey := username + "#" + comm.Md5_go(newpwd)
 	client.Cmd("multi")
 	client.Cmd("hset", "uid:"+userkey, "password", newpwd)
 	client.Cmd("hdel", "User", key)

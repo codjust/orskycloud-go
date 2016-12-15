@@ -53,7 +53,6 @@ func (this *ProfileController) UpdatePwd() {
 }
 
 func (this *ProfileController) UpdatePwdModify() {
-	beego.Debug("pwd:.....")
 	username := this.GetSession("username").(string)
 	password := this.GetSession("password").(string)
 	newpwd := this.GetString("newpwd")
