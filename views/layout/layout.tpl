@@ -35,7 +35,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="/myprofile">个人资料</a></li>
                         <li class="divider"></li>
-                        <li><a href="#">退出</a></li>
+                        <li onclick="IsSignOut()"><a href="#">退出</a></li>
                     </ul>
                 </div>
                 <div class="nav-collapse">
@@ -78,7 +78,7 @@
                         <li class="nav-header"><i class="icon-user"></i> 资料</li>
                         <li class='{{.Active_Profile}}'><a href="/myprofile">我的资料</a></li>
                         <li class='{{.Active_UpdatePwd}}'><a href="/updatepwd">修改密码</a></li>
-                        <li><a href="#">退出</a></li>
+                        <li onclick = "IsSignOut()"><a href="#">退出</a></li>
                     </ul>
                 </div>
             </div>
@@ -113,6 +113,14 @@
     <script src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
     <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
     <script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
+    <script type="text/javascript">
+        function IsSignOut(){
+            var IsOut = confirm("确定退出当前账户吗？")
+            if(IsOut == true){
+                window.location.href = "/login";
+            }
+        }
+    </script>
     {{.Scripts}}
 </body>
 

@@ -81,7 +81,7 @@
 	 vertical-align:middle !important;
 	 height:45px !important;
 	}
-	
+
 </style>
 <body onload="createCode()">
 <div class="tyg-div">
@@ -94,7 +94,7 @@
     	<li><div style="margin-left:100px;">生</div></li>
     	<li><div style="margin-left:120px;">活</div></li>
     </ul>
-</div> 
+</div>
 <div id="contPar" class="contPar">
 	<div id="page1"  style="z-index:1;">
 		<div class="title0">ORSkyCloud</div>
@@ -123,10 +123,10 @@
 				<input id="passwordAgain" type="password" placeholder="重复密码"/>
 			</div>
 			<table >
-			<tr align="center">	
+			<tr align="center">
               <td > <input id="inputCode" type="text" style="width:150px;" placeholder="请输入验证码..."/></td>
 			  <td ><div class="code" id="checkCode" onclick="createCode()" ></div></td>
-			</tr>		
+			</tr>
         	</table>
             <button type="button"  onclick="SubmitRegistInfo()">
             注<span style="width:20px;"></span>册</p>
@@ -160,7 +160,7 @@ function SubmitRegistInfo()
 		}
 		else if(msg.Val == "success")
 		{
-			alert("注册成功，点确定返回登录界面")
+			//alert("注册成功，点确定返回登录界面")
 			window.location.href = "/login"
 		}
 		else
