@@ -128,7 +128,7 @@ func PageSensor(pageNo int, username string, password string) utils.Page {
 	return utils.Page{PageNo: pageNo, PageSize: pageSize, TotalPage: tp, TotalCount: count, FirstPage: pageNo == 1, LastPage: pageNo == tp, List: sensors}
 }
 
-func ReturnDevList(username, password string) []Dev_Temp {
+func ReturnDevList(username, password string) ([]Dev_Temp, string) {
 	client, err := red.Get()
 	ErrHandlr(err)
 
@@ -138,6 +138,9 @@ func ReturnDevList(username, password string) []Dev_Temp {
 	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	device_list_temp, _ := client.Cmd("hget", "uid:"+userkey, "device").Str()
+	if device_list_temp == "" {
+		return d_list, "null"
+	}
 	devices_list := strings.Split(device_list_temp, "#")
 	for _, v := range devices_list {
 		dev_info := client.Cmd("hget", "uid:"+userkey, "did:"+v).String()
@@ -150,7 +153,7 @@ func ReturnDevList(username, password string) []Dev_Temp {
 	}
 
 	red.Put(client)
-	return d_list
+	return d_list, ""
 }
 
 func CreateNewSensor(username string, password string, sensor Sensor) string {

@@ -50,7 +50,7 @@
                         </li>
                         <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">传感器 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="/mysensor/newdevice">新建传感器</a></li>
+                                <li onclick="NewCreateSensor()"><a href="#">新建传感器</a></li>
                                 <li class="divider"></li>
                                 <li><a href="/mysensor">传感器管理</a></li>
                             </ul>
@@ -114,12 +114,29 @@
     <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
     <script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
     <script type="text/javascript">
-        function IsSignOut(){
-            var IsOut = confirm("确定退出当前账户吗？")
+    function IsSignOut()
+    {
+        var IsOut = confirm("确定退出当前账户吗？")
             if(IsOut == true){
                 window.location.href = "/login";
             }
-        }
+    }
+    function NewCreateSensor()
+    {
+        $.ajax({
+            async: false,
+            type:"GET",
+            url:"/mysensor/newsensor"
+            }).done(function(msg){
+            if(msg.Val == "failed")
+            {
+                alert("当前无设备，无法新建传感器，请先添加设备。")
+                window.location.href = "/mydevice/newdevice"
+            }else{
+                window.location.href = "/mysensor/newsensor";
+            }
+        });
+    }
     </script>
     {{.Scripts}}
 </body>

@@ -1,6 +1,6 @@
 <div class="row-fluid">
 		<div class="page-header">
-			<h1>My Sensor <small>new create a sensor</small></h1>
+			<h1>History Data<small>Select time to view</small></h1>
 		</div>
 	<table >
 	<div>

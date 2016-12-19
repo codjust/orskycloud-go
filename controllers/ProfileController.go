@@ -12,6 +12,9 @@ type ProfileController struct {
 func (this *ProfileController) MyProfile() {
 
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	profile := models.ReturnProfileInfo(username, password)
 
 	this.Data["Profile"] = profile
@@ -26,6 +29,9 @@ func (this *ProfileController) MyProfile() {
 func (this *ProfileController) Update() {
 	username, phone, email := this.GetString("username"), this.GetString("phone"), this.GetString("email")
 	user, pwd := this.GetSession("username").(string), this.GetSession("password").(string)
+	if user == "" {
+		this.Redirect("/login", 301)
+	}
 	profile := models.Profile{UserName: username, Phone: phone, EMail: email}
 
 	res := models.UpdataProfileInfo(user, pwd, profile)
@@ -43,6 +49,9 @@ func (this *ProfileController) Update() {
 func (this *ProfileController) UpdatePwd() {
 	username := this.GetSession("username").(string)
 	password := this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	this.Data["Active_UpdatePwd"] = "active"
 	this.Layout = "layout/layout.tpl"
 	this.TplName = "updatepwd.tpl"
@@ -55,6 +64,9 @@ func (this *ProfileController) UpdatePwd() {
 func (this *ProfileController) UpdatePwdModify() {
 	username := this.GetSession("username").(string)
 	password := this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	newpwd := this.GetString("newpwd")
 
 	res := models.ModifyPwd(username, password, newpwd)

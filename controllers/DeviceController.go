@@ -14,6 +14,10 @@ type DeviceController struct {
 
 func (this *DeviceController) MyDevice() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
+
 	var pageNum int
 	var err error
 	if this.Ctx.Input.Param(":page") == "" {
@@ -45,6 +49,10 @@ func (this *DeviceController) NewDevice() {
 	//	this.Data["Page"] = page
 	//	this.Data["Active_Dev"] = "active"
 	username := this.GetSession("username").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
+
 	this.Layout = "layout/layout.tpl"
 	this.TplName = "newdevice.tpl"
 	this.LayoutSections = make(map[string]string)
@@ -53,13 +61,14 @@ func (this *DeviceController) NewDevice() {
 }
 
 func (this *DeviceController) CreateDevice() {
-	beego.Debug("XXXXXXX")
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	var newDevice models.Device
 	newDevice.DevName = this.GetString("devicename")
 	newDevice.Description = this.GetString("description")
 
-	beego.Debug("XXXXXXX")
 	res := models.CreateNewDevice(username, password, newDevice)
 	result := struct {
 		Val string
@@ -70,6 +79,9 @@ func (this *DeviceController) CreateDevice() {
 
 func (this *DeviceController) DeleteDevice() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	did := this.GetString("did")
 	res := models.DeleteDeviceOp(username, password, did)
 	result := struct {
@@ -81,10 +93,10 @@ func (this *DeviceController) DeleteDevice() {
 
 func (this *DeviceController) EditDevice() {
 	did := this.Ctx.Input.Param(":did")
-	beego.Debug("did:", did)
-
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	ret_data := models.ReturnByIdDeviceInfo(username, password, did)
 
 	ret_data.ID = did
@@ -103,6 +115,9 @@ func (this *DeviceController) EditDevice() {
 func (this *DeviceController) EditDeviceModify() {
 	var dev models.Device
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	dev.DevName, dev.Description = this.GetString("devicename"), this.GetString("description")
 	dev.ID = this.GetString("did")
 	res := models.UpdateDeviceInfo(username, password, dev)

@@ -17,7 +17,9 @@ type HistoryController struct {
 func (this *HistoryController) HistoryPage() {
 
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	flag := models.IsExistDevice(username, password)
 	var exp_data []models.DevSenList
 	if flag != true {
@@ -34,6 +36,9 @@ func (this *HistoryController) HistoryPage() {
 
 func (this *HistoryController) GetSensorList() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	Did := this.GetString("did")
 	flag := models.IsExistDevice(username, password)
 	var ret_data []models.S_List
@@ -48,6 +53,9 @@ func (this *HistoryController) GetSensorList() {
 func (this *HistoryController) GetHistoryData() {
 
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	Did := this.GetString("did")
 	Name := this.GetString("name")
 	Start := this.GetString("start")
@@ -62,6 +70,9 @@ func (this *HistoryController) GetHistoryData() {
 
 func (this *HistoryController) DeleteHistoryData() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	Did := this.GetString("did")
 	Name := this.GetString("name")
 	Start := this.GetString("start")
@@ -78,6 +89,9 @@ func (this *HistoryController) DeleteHistoryData() {
 
 func (this *HistoryController) HistoryTrend() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	flag := models.IsExistDevice(username, password)
 	var exp_data []models.DevSenList
 	if flag != true {
@@ -95,6 +109,9 @@ func (this *HistoryController) HistoryTrend() {
 
 func (this *HistoryController) HistoryTrendData() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	Did := this.GetString("did")
 	Name := this.GetString("name")
 	Start := this.GetString("start")
@@ -108,6 +125,9 @@ func (this *HistoryController) HistoryTrendData() {
 
 func (this *HistoryController) DataCompare() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	flag := models.IsExistDevice(username, password)
 	var exp_data []models.DevSenList
 	if flag != true {
@@ -124,6 +144,9 @@ func (this *HistoryController) DataCompare() {
 
 func (this *HistoryController) AnalysisDataCompare() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	Did1 := this.GetString("did1")
 	Did2 := this.GetString("did2")
 	Name1 := this.GetString("name1")

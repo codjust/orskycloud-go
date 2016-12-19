@@ -54,8 +54,19 @@ func (this *SensorController) MySensor() {
 func (this *SensorController) NewSensor() {
 	//this.Data["Active_Sensor"] = "active"
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
+	d_list, err := models.ReturnDevList(username, password)
+	if err != "" {
+		res := struct {
+			Val string
+		}{"failed"}
+		this.Data["json"] = &res
+		this.ServeJSON()
+	}
 
-	d_list := models.ReturnDevList(username, password)
+	beego.Debug("xxxxxxxxx")
 
 	this.Data["DList"] = d_list
 	this.Layout = "layout/layout.tpl"
@@ -68,6 +79,9 @@ func (this *SensorController) NewSensor() {
 
 func (this *SensorController) CreateSensor() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	localtime := time.Now().Format("2006-01-02 15:04:05")
 	var new_sensor models.Sensor
 	new_sensor.Name = this.GetString("name")
@@ -85,6 +99,9 @@ func (this *SensorController) CreateSensor() {
 
 func (this *SensorController) DeleteSensor() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	sensorName := this.GetString("name")
 	Did := this.GetString("did")
 	res := models.DeleteCurrentSensor(username, password, sensorName, Did)
@@ -98,7 +115,9 @@ func (this *SensorController) DeleteSensor() {
 func (this *SensorController) EditSensor() {
 	//data:{"name": Name,"designation": Designation, "did":Did, "unit": Unit}
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
-
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	s_name := this.GetString("name")
 	did := this.GetString("did")
 
@@ -116,6 +135,9 @@ func (this *SensorController) EditSensor() {
 
 func (this *SensorController) EditModifySensor() {
 	username, password := this.GetSession("username").(string), this.GetSession("password").(string)
+	if username == "" {
+		this.Redirect("/login", 301)
+	}
 	var s_info models.Sensor
 
 	s_info.Name = this.GetString("name")
