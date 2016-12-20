@@ -73,12 +73,6 @@ func HandleLogin(username, password string) string {
 	//更新一下登陆时间
 	if res == "" {
 		return "login failed"
-	} else {
-		localtime := time.Now().Format("2006-01-02 15:04:05")
-		r := client.Cmd("hset", "uid:"+res, "last_login_time", localtime)
-		if r.Err != nil {
-			return "login failed"
-		}
 	}
 	red.Put(client)
 	return "login success"
@@ -88,9 +82,14 @@ func ReturnHomePage(username, password string) string {
 	client, err := red.Get()
 	ErrHandlr(err)
 	key := username + "#" + comm.Md5_go(password)
-	//key := username + "#" + password
 	userkey, _ := client.Cmd("hget", "User", key).Str()
 	last_login_time, _ := client.Cmd("hget", "uid:"+userkey, "last_login_time").Str()
+	//更新登陆时间
+	localtime := time.Now().Format("2006-01-02 15:04:05")
+	r := client.Cmd("hset", "uid:"+userkey, "last_login_time", localtime)
+	if r.Err != nil {
+		return "login failed"
+	}
 	red.Put(client)
 	return last_login_time
 }

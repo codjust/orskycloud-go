@@ -3,8 +3,8 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"orskycloud-go/cache_module"
-	"orskycloud-go/logicfunc"
-	//"orskycloud-go/models"
+	//"orskycloud-go/logicfunc"
+	"orskycloud-go/models"
 	//"os"
 	//"strconv"
 )
@@ -22,7 +22,7 @@ func (this *HomePageController) HomePage() {
 		this.Redirect("/login", 301)
 	}
 	beego.Debug(username, password)
-	last_logic_time := logicfunc.GetHomePage(username, password)
+	last_logic_time := models.ReturnHomePage(username, password)
 	beego.Debug("time:", last_logic_time)
 	this.Data["Last_login_time"] = last_logic_time
 	this.Data["User"] = username
