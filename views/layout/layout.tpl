@@ -56,7 +56,7 @@
                             </ul>
                         </li>
                         <li><a href="/history">数据统计</a></li>
-                        <li><a href="/history">开发者指南</a></li>
+                        <li><a href="/doc/index.html">开发者指南</a></li>
                     </ul>
                 </div>
             </div>
