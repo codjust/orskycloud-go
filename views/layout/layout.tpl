@@ -108,11 +108,11 @@
     <script src="/static/js/jquery.flot.js"></script>
     <script src="/static/js/jquery.flot.resize.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
-    <script src="/static/js/bootstrap-paginator.min.js"></script>
-    <script src="/static/js/jqPaginator.min.js"></script>
     <script src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
     <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
     <script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
+    <script src="/static/js/bootstrap-paginator.min.js"></script>
+    <script src="/static/js/jqPaginator.min.js"></script>
     <script type="text/javascript">
     function IsSignOut()
     {
