@@ -30,7 +30,7 @@
 				<ul class="dropdown-menu">
 					<li ><a href="/mysensor/edit?did={{.Did}}&&name={{.Name}}"><i class="icon-pencil"></i>编辑</a></li>
 					<li onclick="SubmitDeleteSensor({{.Did}},{{.Name}})"><a href="#"><i class="icon-trash"></i> 删除</a></li>
-					<li><a href="/mysensor/newdevice"><i class="icon-trash"></i> 新建</a></li>
+					<li><a href="/mysensor/newsensor"><i class="icon-trash"></i> 新建</a></li>
 					<!-- <li><a href="#"><i class="icon-user"></i> Details</a></li> -->
 					<!-- <li class="nav-header">Permissions</li>
 					<li><a href="#"><i class="icon-lock"></i> Make <strong>Admin</strong></a></li>
