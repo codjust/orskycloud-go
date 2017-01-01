@@ -6,7 +6,7 @@ import (
 	"github.com/fzzy/radix/pool"
 	//"github.com/fzzy/radix/redis"
 	"orskycloud-go/comm"
-	"os"
+	//"os"
 	"time"
 )
 
@@ -15,11 +15,13 @@ var (
 	REDIS_DB   int
 	red        *pool.Pool
 )
+var e *beego.Controller
 
 func ErrHandlr(err error) {
 	if err != nil {
-		beego.Debug("error:", err)
-		os.Exit(1)
+		beego.Debug("model op error:", err)
+		e.Redirect("/login", 302)
+		//os.Exit(1)
 	}
 }
 
