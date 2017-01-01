@@ -136,7 +136,14 @@ function formatTime(Hour,Minute,Second){
    		document.getElementById("end").value = EndTime
    		break;
    	case "year":
-   		EndTime = Year + "-" + Month + "-" + Day + " " + formatTime(Hour,Minute,Second);
+        if(Month < 10) {
+            Month = "0" + Month;
+        }
+        if(Day < 10){
+            Day = "0" + Day
+        }
+   	    EndTime		= Year + "-" + Month + "-" + Day + " " +  formatTime(Hour,Minute,Second);
+   	    EndTime = Year + "-" + Month + "-" + Day + " " + formatTime(Hour,Minute,Second);
    		Year = Year - 1;
    		StartTime   = Year + "-" + Month + "-" + Day + " " + formatTime(Hour,Minute,Second);
    		document.getElementById("start").value = StartTime
