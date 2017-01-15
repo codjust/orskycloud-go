@@ -9,3 +9,10 @@ orskycloud后台管理实现，使用beego web框架，初次使用beego，大�
  (1)redis，持久化<br>
  
  效果图：
+![alt text](https://github.com/huchangwei/orskycloud-go/blob/master/images/1.png)
+
+![alt text](https://github.com/huchangwei/orskycloud-go/blob/master/images/2.png)
+
+![alt text](https://github.com/huchangwei/orskycloud-go/blob/master/images/3.png)
+
+![alt text](https://github.com/huchangwei/orskycloud-go/blob/master/images/4.png)
